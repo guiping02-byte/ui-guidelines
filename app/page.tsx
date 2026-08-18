@@ -1,81 +1,38 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import {
+  defaultPalette,
+  mix,
+  normalizeHex,
+  serializeTokens,
+  validateStoredPalette,
+  type Palette,
+} from "./palette";
 
-type Palette = {
-  primary: string;
-  atmosphere: string;
-  corporate: string;
-  accent: string;
-};
+const STORAGE_KEY = "maternal-ui-palette";
 
-const defaultPalette: Palette = {
-  primary: "#2388F5",
-  atmosphere: "#55A9F8",
-  corporate: "#2FAAF0",
-  accent: "#FFB02E",
-};
-
-const presets: Array<{ name: string; colors: Palette }> = [
-  { name: "清爽蓝", colors: defaultPalette },
+const presets: Array<{ name: string; note: string; colors: Palette }> = [
+  { name: "规范默认", note: "稳重品牌红", colors: defaultPalette },
   {
-    name: "天空蓝",
-    colors: {
-      primary: "#148EEA",
-      atmosphere: "#62B8F5",
-      corporate: "#28A9E8",
-      accent: "#FFAA33",
-    },
+    name: "柔和莓红",
+    note: "亲和内容型",
+    colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2" },
   },
   {
-    name: "钴石蓝",
-    colors: {
-      primary: "#3767E8",
-      atmosphere: "#7B9CF4",
-      corporate: "#4D77E9",
-      accent: "#FFAD2F",
-    },
+    name: "暖珊瑚",
+    note: "活力电商型",
+    colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0" },
   },
 ];
 
-function normalizeHex(value: string) {
-  const raw = value.trim().replace(/^#/, "");
-  if (/^[0-9a-fA-F]{6}$/.test(raw)) return `#${raw.toUpperCase()}`;
-  if (/^[0-9a-fA-F]{3}$/.test(raw)) {
-    return `#${raw
-      .split("")
-      .map((char) => char + char)
-      .join("")
-      .toUpperCase()}`;
-  }
-  return null;
-}
-
-function mix(hex: string, target: string, amount: number) {
-  const source = normalizeHex(hex) ?? defaultPalette.primary;
-  const destination = normalizeHex(target) ?? "#FFFFFF";
-  const channels = [1, 3, 5].map((index) => {
-    const start = parseInt(source.slice(index, index + 2), 16);
-    const end = parseInt(destination.slice(index, index + 2), 16);
-    return Math.round(start + (end - start) * amount)
-      .toString(16)
-      .padStart(2, "0");
-  });
-  return `#${channels.join("").toUpperCase()}`;
-}
-
-function ColorControl({
-  label,
-  value,
-  onChange,
-}: {
+function ColorControl({ label, description, value, onChange }: {
   label: string;
+  description: string;
   value: string;
   onChange: (value: string) => void;
 }) {
   const [draft, setDraft] = useState(value);
-
-  useEffect(() => setDraft(value), [value]);
 
   function commit() {
     const normalized = normalizeHex(draft);
@@ -89,81 +46,63 @@ function ColorControl({
 
   return (
     <label className="color-control">
-      <span>{label}</span>
-      <div className="color-input-row">
-        <input
-          className="color-picker"
-          type="color"
-          value={value}
-          onChange={(event) => onChange(event.target.value.toUpperCase())}
-          aria-label={`${label}取色器`}
-        />
-        <input
-          className="hex-input"
-          value={draft}
-          onChange={(event) => setDraft(event.target.value)}
-          onBlur={commit}
-          onKeyDown={(event) => {
-            if (event.key === "Enter") event.currentTarget.blur();
-          }}
-          spellCheck={false}
-          aria-label={`${label}色号`}
-        />
-      </div>
+      <span className="control-copy"><b>{label}</b><small>{description}</small></span>
+      <span className="color-input-row">
+        <input className="color-picker" type="color" value={value} onChange={(event) => onChange(event.target.value.toUpperCase())} aria-label={`${label}取色器`} />
+        <input className="hex-input" value={draft} onChange={(event) => setDraft(event.target.value)} onBlur={commit} onKeyDown={(event) => { if (event.key === "Enter") event.currentTarget.blur(); }} spellCheck={false} aria-label={`${label}色号`} />
+      </span>
     </label>
   );
 }
 
 export default function Home() {
   const [palette, setPalette] = useState<Palette>(defaultPalette);
-  const [copied, setCopied] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
 
   useEffect(() => {
-    const saved = window.localStorage.getItem("blue-ui-palette");
-    if (!saved) return;
-    try {
-      const parsed = JSON.parse(saved) as Partial<Palette>;
-      if (
-        normalizeHex(parsed.primary ?? "") &&
-        normalizeHex(parsed.atmosphere ?? "") &&
-        normalizeHex(parsed.corporate ?? "") &&
-        normalizeHex(parsed.accent ?? "")
-      ) {
-        setPalette(parsed as Palette);
+    const frame = window.requestAnimationFrame(() => {
+      const saved = window.localStorage.getItem(STORAGE_KEY);
+      if (saved) {
+        try {
+          const valid = validateStoredPalette(JSON.parse(saved));
+          if (valid) setPalette(valid);
+        } catch {
+          // Invalid local preferences fall back to the documented defaults.
+        }
       }
-    } catch {
-      // Keep the default palette when local preferences are invalid.
-    }
+      setHydrated(true);
+    });
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
-    window.localStorage.setItem("blue-ui-palette", JSON.stringify(palette));
-  }, [palette]);
+    if (hydrated) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(palette));
+  }, [hydrated, palette]);
 
-  const tones = useMemo(
-    () => [
-      { name: "50", color: mix(palette.primary, "#FFFFFF", 0.92) },
-      { name: "100", color: mix(palette.primary, "#FFFFFF", 0.82) },
-      { name: "200", color: mix(palette.primary, "#FFFFFF", 0.66) },
-      { name: "300", color: mix(palette.primary, "#FFFFFF", 0.44) },
-      { name: "400", color: mix(palette.primary, "#FFFFFF", 0.2) },
-      { name: "500", color: palette.primary },
-      { name: "600", color: mix(palette.primary, "#000000", 0.12) },
-      { name: "700", color: mix(palette.primary, "#000000", 0.26) },
-      { name: "800", color: mix(palette.primary, "#000000", 0.4) },
-      { name: "900", color: mix(palette.primary, "#000000", 0.56) },
-    ],
-    [palette.primary],
-  );
+  const tones = useMemo(() => [
+    { name: "50", color: mix(palette.brand, "#FFFFFF", 0.94) },
+    { name: "100", color: mix(palette.brand, "#FFFFFF", 0.84) },
+    { name: "200", color: mix(palette.brand, "#FFFFFF", 0.68) },
+    { name: "300", color: mix(palette.brand, "#FFFFFF", 0.48) },
+    { name: "400", color: mix(palette.brand, "#FFFFFF", 0.24) },
+    { name: "500", color: palette.brand },
+    { name: "600", color: mix(palette.brand, "#000000", 0.12) },
+    { name: "700", color: mix(palette.brand, "#000000", 0.25) },
+    { name: "800", color: mix(palette.brand, "#000000", 0.38) },
+    { name: "900", color: mix(palette.brand, "#000000", 0.52) },
+  ], [palette.brand]);
 
   const style = {
-    "--primary": palette.primary,
-    "--primary-soft": mix(palette.primary, "#FFFFFF", 0.88),
-    "--primary-pale": mix(palette.primary, "#FFFFFF", 0.94),
-    "--primary-deep": mix(palette.primary, "#000000", 0.28),
-    "--atmosphere": palette.atmosphere,
-    "--corporate": palette.corporate,
-    "--accent": palette.accent,
+    "--brand": palette.brand,
+    "--brand-soft": mix(palette.brand, "#FFFFFF", 0.88),
+    "--brand-pale": mix(palette.brand, "#FFFFFF", 0.94),
+    "--brand-deep": mix(palette.brand, "#000000", 0.22),
+    "--price": palette.price,
+    "--promo": palette.promo,
+    "--member": palette.member,
+    "--care": palette.care,
+    "--care-pale": mix(palette.care, "#FFFFFF", 0.9),
   } as React.CSSProperties;
 
   function updateColor(key: keyof Palette, value: string) {
@@ -171,192 +110,107 @@ export default function Home() {
   }
 
   async function copyTokens() {
-    const text = [
-      `--color-primary: ${palette.primary};`,
-      `--color-atmosphere: ${palette.atmosphere};`,
-      `--color-corporate: ${palette.corporate};`,
-      `--color-accent: ${palette.accent};`,
-    ].join("\n");
-    await navigator.clipboard.writeText(text);
-    setCopied(true);
-    window.setTimeout(() => setCopied(false), 1600);
+    try {
+      await navigator.clipboard.writeText(serializeTokens(palette));
+      setCopyState("copied");
+    } catch {
+      setCopyState("error");
+    }
+    window.setTimeout(() => setCopyState("idle"), 1700);
   }
 
   return (
     <main className="app-shell" style={style}>
       <header className="topbar">
         <div>
-          <p className="eyebrow">MINI PROGRAM · UI KIT</p>
-          <h1>蓝色设计系统看板</h1>
-          <p className="subtitle">直接修改色号，右侧组件会实时更新</p>
+          <p className="eyebrow">MATERNAL &amp; BABY · MINI PROGRAM UI KIT</p>
+          <h1>红色母婴设计系统看板</h1>
+          <p className="subtitle">直接修改色号，组件会实时更新</p>
         </div>
         <button className="copy-button" onClick={copyTokens} type="button">
-          {copied ? "已复制" : "复制 CSS 色号"}
+          {copyState === "copied" ? "已复制" : copyState === "error" ? "复制失败，请重试" : "复制 CSS Tokens"}
         </button>
       </header>
 
       <div className="workspace">
         <aside className="editor-panel" aria-label="颜色编辑区">
           <div className="panel-heading">
-            <div>
-              <span className="step">01</span>
-              <h2>调整品牌色</h2>
-            </div>
-            <button
-              className="reset-button"
-              type="button"
-              onClick={() => setPalette(defaultPalette)}
-            >
-              恢复默认
-            </button>
+            <div><span className="step">01</span><div><h2>调整语义色</h2><p>每种红色负责不同业务信息</p></div></div>
+            <button className="reset-button" type="button" onClick={() => setPalette(defaultPalette)}>恢复规范默认值</button>
           </div>
 
           <div className="controls">
-            <ColorControl
-              label="主色 Primary"
-              value={palette.primary}
-              onChange={(value) => updateColor("primary", value)}
-            />
-            <ColorControl
-              label="氛围辅色"
-              value={palette.atmosphere}
-              onChange={(value) => updateColor("atmosphere", value)}
-            />
-            <ColorControl
-              label="企业辅色"
-              value={palette.corporate}
-              onChange={(value) => updateColor("corporate", value)}
-            />
-            <ColorControl
-              label="强调色"
-              value={palette.accent}
-              onChange={(value) => updateColor("accent", value)}
-            />
+            <ColorControl key={`brand-${palette.brand}`} label="品牌主色" description="品牌、主按钮、选中态" value={palette.brand} onChange={(value) => updateColor("brand", value)} />
+            <ColorControl key={`price-${palette.price}`} label="价格红" description="商品价格、到手价" value={palette.price} onChange={(value) => updateColor("price", value)} />
+            <ColorControl key={`promo-${palette.promo}`} label="促销红" description="优惠券、秒杀、满减" value={palette.promo} onChange={(value) => updateColor("promo", value)} />
+            <ColorControl key={`member-${palette.member}`} label="会员深红" description="VIP 权益、会员专享" value={palette.member} onChange={(value) => updateColor("member", value)} />
+            <ColorControl key={`care-${palette.care}`} label="关怀粉红" description="成长提醒、育儿内容" value={palette.care} onChange={(value) => updateColor("care", value)} />
           </div>
 
-          <div className="preset-section">
-            <span className="section-label">快速试色</span>
+          <section className="preset-section" aria-label="快速试色方案">
+            <span className="section-label">PALETTE PRESETS</span>
             <div className="preset-list">
               {presets.map((preset) => (
-                <button
-                  type="button"
-                  className="preset-button"
-                  key={preset.name}
-                  onClick={() => setPalette(preset.colors)}
-                >
-                  <span
-                    className="preset-dot"
-                    style={{ background: preset.colors.primary }}
-                  />
-                  {preset.name}
+                <button key={preset.name} type="button" className="preset-button" onClick={() => setPalette(preset.colors)}>
+                  <span className="preset-colors" aria-hidden="true"><i style={{ background: preset.colors.brand }} /><i style={{ background: preset.colors.price }} /><i style={{ background: preset.colors.care }} /></span>
+                  <span><b>{preset.name}</b><small>{preset.note}</small></span>
                 </button>
               ))}
             </div>
-          </div>
+          </section>
 
-          <div className="tip-card">
-            <span>小提示</span>
-            <p>你修改的颜色会保存在当前浏览器，下次打开仍会保留。</p>
-          </div>
+          <div className="tip-card"><b>自动保存</b><p>调整后的色号会保存在当前浏览器，下次打开仍会保留。</p></div>
         </aside>
 
         <section className="design-board" aria-label="设计系统组件预览">
           <div className="board-header">
-            <div>
-              <span className="step">02</span>
-              <h2>组件实时预览</h2>
-            </div>
+            <div><span className="step">02</span><div><h2>组件实时预览</h2><p>颜色、字体和状态统一呈现</p></div></div>
             <span className="live-badge"><i /> LIVE</span>
           </div>
 
           <section className="tone-card">
-            <div className="card-title-row">
-              <div>
-                <span className="section-label">COLOR SCALE</span>
-                <h3>主色色阶</h3>
-              </div>
-              <strong>{palette.primary}</strong>
-            </div>
+            <div className="card-title-row"><div><span className="section-label">BRAND COLOR SCALE</span><h3>品牌主色色阶</h3></div><strong>{palette.brand}</strong></div>
             <div className="tone-grid">
               {tones.map((tone, index) => (
-                <div className="tone-item" key={tone.name}>
-                  <div
-                    className="tone-swatch"
-                    style={{ background: tone.color }}
-                  />
-                  <span>{tone.name}</span>
-                  <code>{tone.color}</code>
-                  {index === 5 && <b>主色</b>}
-                </div>
+                <div className="tone-item" key={tone.name}><div className="tone-swatch" style={{ background: tone.color }} /><span>{tone.name}</span><code>{tone.color}</code>{index === 5 && <b>主色</b>}</div>
               ))}
             </div>
           </section>
 
           <div className="component-grid">
             <article className="component-card typography-card">
-              <span className="section-label">TYPOGRAPHY</span>
-              <div className="type-sample">
-                <div className="type-mark">Aa</div>
-                <div><b>页面标题</b><span>22px · Semibold</span></div>
-              </div>
-              <div className="type-sample body-type">
-                <div className="type-mark">Aa</div>
-                <div><b>正文信息</b><span>15px · Regular</span></div>
-              </div>
+              <span className="section-label">TYPOGRAPHY</span><h3>文字层级</h3>
+              <div className="type-row"><b className="type-page">页面标题</b><span>24 / 32 · 600</span></div>
+              <div className="type-row"><b className="type-section">模块标题</b><span>20 / 28 · 600</span></div>
+              <div className="type-row"><b className="type-subsection">区块标题</b><span>16 / 24 · 600</span></div>
+              <div className="type-row"><b className="type-body">正文信息清晰易读</b><span>14 / 22 · 400</span></div>
+              <div className="type-row"><b className="type-caption">辅助说明与备注</b><span>12 / 20 · 400</span></div>
             </article>
 
             <article className="component-card">
-              <span className="section-label">BUTTONS</span>
-              <h3>操作按钮</h3>
-              <div className="button-stack">
-                <button className="demo-primary" type="button">主要操作</button>
-                <button className="demo-secondary" type="button">次要操作</button>
-                <button className="demo-ghost" type="button">轻量按钮</button>
-              </div>
+              <span className="section-label">ACTIONS</span><h3>按钮与输入</h3>
+              <div className="button-stack"><button className="demo-primary" type="button">主要操作</button><button className="demo-secondary" type="button">次要操作</button><button className="demo-soft" type="button">轻量按钮</button><button className="demo-disabled" type="button" disabled>暂不可用</button></div>
+              <label className="search-box"><span aria-hidden="true">⌕</span><input aria-label="搜索示例" placeholder="搜索商品、育儿内容" /></label>
+            </article>
+
+            <article className="component-card product-card">
+              <div className="product-visual" aria-hidden="true"><span>6–12 月龄</span><i>成长营养</i></div>
+              <div className="product-content"><span className="promo-label">限时优惠</span><h3>宝宝成长营养组合</h3><p>科学配比 · 温和易吸收</p><div className="price-row"><span>¥</span><b>259</b><del>¥329</del></div><div className="member-line"><b>会员专享</b><span>再省 ¥20</span></div></div>
+            </article>
+
+            <article className="component-card care-card">
+              <span className="section-label">CARE MESSAGE</span><div className="care-illustration" aria-hidden="true"><i>♡</i></div><h3>安心成长提醒</h3><p>宝宝本周进入辅食适应期，建议从细腻单一食材开始，留意接受度。</p><button type="button">查看喂养建议 <span>→</span></button>
             </article>
 
             <article className="component-card">
-              <span className="section-label">INPUT</span>
-              <h3>搜索与输入</h3>
-              <label className="search-box">
-                <span>⌕</span>
-                <input aria-label="搜索示例" placeholder="搜索服务或订单" />
-              </label>
-              <div className="focus-input">
-                <span>收件地址</span><b>请选择 ›</b>
-              </div>
-            </article>
-
-            <article className="component-card chart-card">
-              <span className="section-label">DATA</span>
-              <div className="metric-row"><div><b>1,286</b><span>本月订单</span></div><em>+18.6%</em></div>
-              <div className="bar-chart" aria-label="订单趋势示意图">
-                {[42, 66, 52, 82, 68, 92, 78].map((height, index) => (
-                  <i key={index} style={{ height: `${height}%` }} />
-                ))}
-              </div>
+              <span className="section-label">NAVIGATION</span><h3>小程序底部导航</h3>
+              <nav className="nav-demo" aria-label="底部导航示例"><span className="active"><i>⌂</i><b>首页</b></span><span><i>▦</i><b>分类</b></span><span><i>♡</i><b>育儿</b></span><span><i>♙</i><b>我的</b></span></nav>
             </article>
 
             <article className="component-card">
-              <span className="section-label">NAVIGATION</span>
-              <h3>底部导航</h3>
-              <div className="nav-demo">
-                <div className="active"><i>⌂</i><span>首页</span></div>
-                <div><i>▤</i><span>订单</span></div>
-                <div><i>♙</i><span>我的</span></div>
-              </div>
-            </article>
-
-            <article className="component-card">
-              <span className="section-label">STATUS</span>
-              <h3>状态标签</h3>
-              <div className="tag-list">
-                <span className="tag in-progress">进行中</span>
-                <span className="tag official">官方认证</span>
-                <span className="tag warning">待处理</span>
-                <span className="tag neutral">已关闭</span>
-              </div>
-              <div className="mini-notice"><i>✓</i><div><b>提交成功</b><span>信息已保存</span></div></div>
+              <span className="section-label">STATUS</span><h3>状态与反馈</h3>
+              <div className="tag-list"><span className="tag brand-tag">品牌活动</span><span className="tag promo-tag">满 299 减 40</span><span className="tag success-tag">已完成</span><span className="tag warning-tag">库存偏低</span><span className="tag danger-tag">操作失败</span></div>
+              <div className="success-notice"><i>✓</i><span><b>保存成功</b><small>新的设计 Token 已应用</small></span></div>
             </article>
           </div>
         </section>
