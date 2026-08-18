@@ -2,29 +2,30 @@
 
 import { useEffect, useMemo, useState } from "react";
 import {
-  defaultPalette,
+  defaultPalettes,
   mix,
   normalizeHex,
   serializeTokens,
+  storageKeyForTheme,
   validateStoredPalette,
   type Palette,
+  type ThemeId,
 } from "./palette";
 
-const STORAGE_KEY = "maternal-ui-palette";
+const THEME_KEY = "ui-board-theme";
 
-const presets: Array<{ name: string; note: string; colors: Palette }> = [
-  { name: "规范默认", note: "稳重品牌红", colors: defaultPalette },
-  {
-    name: "柔和莓红",
-    note: "亲和内容型",
-    colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2" },
-  },
-  {
-    name: "暖珊瑚",
-    note: "活力电商型",
-    colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0" },
-  },
-];
+const themePresets: Record<ThemeId, Array<{ name: string; note: string; colors: Palette }>> = {
+  red: [
+    { name: "规范默认", note: "稳重品牌红", colors: defaultPalettes.red },
+    { name: "柔和莓红", note: "亲和内容型", colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2" } },
+    { name: "暖珊瑚", note: "活力电商型", colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0" } },
+  ],
+  blue: [
+    { name: "清爽蓝", note: "明快通用型", colors: defaultPalettes.blue },
+    { name: "天空蓝", note: "轻盈服务型", colors: { brand: "#148EEA", price: "#1266C7", promo: "#0086D9", member: "#164A7B", care: "#62B8F5" } },
+    { name: "钴石蓝", note: "稳重专业型", colors: { brand: "#3767E8", price: "#2954C8", promo: "#4169D8", member: "#233B78", care: "#7B9CF4" } },
+  ],
+};
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -56,29 +57,40 @@ function ColorControl({ label, description, value, onChange }: {
 }
 
 export default function Home() {
-  const [palette, setPalette] = useState<Palette>(defaultPalette);
+  const [theme, setTheme] = useState<ThemeId>("red");
+  const [palettes, setPalettes] = useState<Record<ThemeId, Palette>>(defaultPalettes);
   const [hydrated, setHydrated] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const palette = palettes[theme];
+  const presets = themePresets[theme];
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
-      const saved = window.localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          const valid = validateStoredPalette(JSON.parse(saved));
-          if (valid) setPalette(valid);
-        } catch {
-          // Invalid local preferences fall back to the documented defaults.
+      const loaded = { ...defaultPalettes };
+      for (const themeId of ["red", "blue"] as const) {
+        const saved = window.localStorage.getItem(storageKeyForTheme(themeId));
+        if (saved) {
+          try {
+            loaded[themeId] = validateStoredPalette(JSON.parse(saved)) ?? defaultPalettes[themeId];
+          } catch {
+            loaded[themeId] = defaultPalettes[themeId];
+          }
         }
       }
+      setPalettes(loaded);
+      const savedTheme = window.localStorage.getItem(THEME_KEY);
+      if (savedTheme === "red" || savedTheme === "blue") setTheme(savedTheme);
       setHydrated(true);
     });
     return () => window.cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
-    if (hydrated) window.localStorage.setItem(STORAGE_KEY, JSON.stringify(palette));
-  }, [hydrated, palette]);
+    if (!hydrated) return;
+    window.localStorage.setItem(THEME_KEY, theme);
+    window.localStorage.setItem(storageKeyForTheme("red"), JSON.stringify(palettes.red));
+    window.localStorage.setItem(storageKeyForTheme("blue"), JSON.stringify(palettes.blue));
+  }, [hydrated, palettes, theme]);
 
   const tones = useMemo(() => [
     { name: "50", color: mix(palette.brand, "#FFFFFF", 0.94) },
@@ -106,7 +118,14 @@ export default function Home() {
   } as React.CSSProperties;
 
   function updateColor(key: keyof Palette, value: string) {
-    setPalette((current) => ({ ...current, [key]: value }));
+    setPalettes((current) => ({
+      ...current,
+      [theme]: { ...current[theme], [key]: value },
+    }));
+  }
+
+  function applyPalette(colors: Palette) {
+    setPalettes((current) => ({ ...current, [theme]: colors }));
   }
 
   async function copyTokens() {
@@ -124,19 +143,25 @@ export default function Home() {
       <header className="topbar">
         <div>
           <p className="eyebrow">MATERNAL &amp; BABY · MINI PROGRAM UI KIT</p>
-          <h1>红色母婴设计系统看板</h1>
+          <h1>{theme === "red" ? "红色母婴设计系统看板" : "蓝色通用设计系统看板"}</h1>
           <p className="subtitle">直接修改色号，组件会实时更新</p>
         </div>
-        <button className="copy-button" onClick={copyTokens} type="button">
-          {copyState === "copied" ? "已复制" : copyState === "error" ? "复制失败，请重试" : "复制 CSS Tokens"}
-        </button>
+        <div className="topbar-actions">
+          <div className="theme-switcher" role="group" aria-label="看板颜色主题">
+            <button type="button" aria-pressed={theme === "red"} onClick={() => setTheme("red")}><i className="red-dot" />红色母婴</button>
+            <button type="button" aria-pressed={theme === "blue"} onClick={() => setTheme("blue")}><i className="blue-dot" />蓝色通用</button>
+          </div>
+          <button className="copy-button" onClick={copyTokens} type="button">
+            {copyState === "copied" ? "已复制" : copyState === "error" ? "复制失败，请重试" : "复制 CSS Tokens"}
+          </button>
+        </div>
       </header>
 
       <div className="workspace">
         <aside className="editor-panel" aria-label="颜色编辑区">
           <div className="panel-heading">
             <div><span className="step">01</span><div><h2>调整语义色</h2><p>每种红色负责不同业务信息</p></div></div>
-            <button className="reset-button" type="button" onClick={() => setPalette(defaultPalette)}>恢复规范默认值</button>
+            <button className="reset-button" type="button" onClick={() => applyPalette(defaultPalettes[theme])}>恢复规范默认值</button>
           </div>
 
           <div className="controls">
@@ -151,7 +176,7 @@ export default function Home() {
             <span className="section-label">PALETTE PRESETS</span>
             <div className="preset-list">
               {presets.map((preset) => (
-                <button key={preset.name} type="button" className="preset-button" onClick={() => setPalette(preset.colors)}>
+                <button key={preset.name} type="button" className="preset-button" onClick={() => applyPalette(preset.colors)}>
                   <span className="preset-colors" aria-hidden="true"><i style={{ background: preset.colors.brand }} /><i style={{ background: preset.colors.price }} /><i style={{ background: preset.colors.care }} /></span>
                   <span><b>{preset.name}</b><small>{preset.note}</small></span>
                 </button>

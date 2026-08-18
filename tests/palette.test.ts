@@ -3,8 +3,10 @@ import test from "node:test";
 
 import {
   defaultPalette,
+  defaultPalettes,
   normalizeHex,
   serializeTokens,
+  storageKeyForTheme,
   validateStoredPalette,
 } from "../app/palette.ts";
 
@@ -38,4 +40,23 @@ test("serializes the current semantic palette as CSS tokens", () => {
       "--color-care: #FF7A90;",
     ].join("\n"),
   );
+});
+
+test("keeps red and blue palettes in separate storage slots", () => {
+  assert.deepEqual(defaultPalettes.red, {
+    brand: "#D62F36",
+    price: "#F04438",
+    promo: "#FF4D4F",
+    member: "#8F1D22",
+    care: "#FF7A90",
+  });
+  assert.deepEqual(defaultPalettes.blue, {
+    brand: "#2388F5",
+    price: "#1967D2",
+    promo: "#0077CC",
+    member: "#173B70",
+    care: "#55A9F8",
+  });
+  assert.equal(storageKeyForTheme("red"), "maternal-ui-palette:red");
+  assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue");
 });

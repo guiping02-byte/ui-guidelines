@@ -6,13 +6,26 @@ export type Palette = {
   care: string;
 };
 
-export const defaultPalette: Palette = {
-  brand: "#D62F36",
-  price: "#F04438",
-  promo: "#FF4D4F",
-  member: "#8F1D22",
-  care: "#FF7A90",
+export type ThemeId = "red" | "blue";
+
+export const defaultPalettes: Record<ThemeId, Palette> = {
+  red: {
+    brand: "#D62F36",
+    price: "#F04438",
+    promo: "#FF4D4F",
+    member: "#8F1D22",
+    care: "#FF7A90",
+  },
+  blue: {
+    brand: "#2388F5",
+    price: "#1967D2",
+    promo: "#0077CC",
+    member: "#173B70",
+    care: "#55A9F8",
+  },
 };
+
+export const defaultPalette = defaultPalettes.red;
 
 const paletteKeys: Array<keyof Palette> = ["brand", "price", "promo", "member", "care"];
 
@@ -53,4 +66,8 @@ export function serializeTokens(palette: Palette) {
     `--color-member: ${palette.member};`,
     `--color-care: ${palette.care};`,
   ].join("\n");
+}
+
+export function storageKeyForTheme(theme: ThemeId) {
+  return `maternal-ui-palette:${theme}`;
 }

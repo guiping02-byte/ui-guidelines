@@ -14,7 +14,7 @@ body {
   margin: 0;
   min-width: 320px;
   color: var(--text-primary);
-  background: linear-gradient(180deg, #fffafa 0, var(--background) 320px);
+  background: linear-gradient(180deg, #fbfcfe 0, var(--background) 320px);
   font-family: Inter, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
   font-size: 14px;
   line-height: 22px;
@@ -34,6 +34,13 @@ h1 { margin-bottom: 8px; font-size: clamp(30px, 4vw, 44px); line-height: 1.12; l
 h2 { margin: 0; font-size: 20px; line-height: 28px; letter-spacing: -.02em; }
 h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .subtitle { margin: 0; color: var(--text-secondary); font-size: 15px; line-height: 24px; }
+.topbar-actions { display: flex; align-items: center; gap: 10px; }
+.theme-switcher { display: inline-flex; padding: 4px; border: 1px solid var(--border); border-radius: 12px; background: #fff; box-shadow: 0 4px 16px rgba(34,42,53,.06); }
+.theme-switcher button { display: inline-flex; align-items: center; gap: 7px; min-height: 36px; padding: 0 12px; border: 0; border-radius: 8px; color: var(--text-secondary); background: transparent; font-size: 13px; font-weight: 700; }
+.theme-switcher button[aria-pressed="true"] { color: var(--text-primary); background: var(--brand-pale); box-shadow: 0 1px 5px rgba(31,35,41,.09); }
+.theme-switcher i { width: 9px; height: 9px; border-radius: 50%; }
+.red-dot { background: #d62f36; }
+.blue-dot { background: #2388f5; }
 .copy-button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 10px; color: #fff; background: var(--brand); box-shadow: 0 8px 22px color-mix(in srgb, var(--brand), transparent 76%); font-weight: 700; }
 .copy-button:hover { background: color-mix(in srgb, var(--brand), white 16%); }
 .copy-button:active { background: var(--brand-deep); }
@@ -169,6 +176,9 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 @media (max-width: 760px) {
   .app-shell { width: min(100% - 24px, 620px); padding-top: 24px; }
   .topbar { align-items: flex-start; flex-direction: column; }
+  .topbar-actions { width: 100%; align-items: stretch; flex-direction: column; }
+  .theme-switcher { display: grid; grid-template-columns: 1fr 1fr; }
+  .theme-switcher button { justify-content: center; min-height: 44px; }
   .copy-button { width: 100%; }
   .workspace { grid-template-columns: 1fr; }
   .editor-panel { position: static; }

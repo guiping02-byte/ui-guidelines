@@ -51,3 +51,13 @@ test("renders the default semantic palette and representative components", async
   assert.match(html, /限时优惠/);
   assert.match(html, /复制 CSS Tokens/);
 });
+
+test("renders a two-theme switcher with red selected by default", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /红色母婴/);
+  assert.match(html, /蓝色通用/);
+  assert.match(html, /<button[^>]*aria-pressed="true"[^>]*>[\s\S]*?红色母婴<\/button>/);
+  assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?蓝色通用<\/button>/);
+});
