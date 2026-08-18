@@ -4,6 +4,7 @@ import test from "node:test";
 import {
   defaultPalette,
   defaultPalettes,
+  getThemePresets,
   normalizeHex,
   serializeTokens,
   storageKeyForTheme,
@@ -59,4 +60,11 @@ test("keeps red and blue palettes in separate storage slots", () => {
   });
   assert.equal(storageKeyForTheme("red"), "maternal-ui-palette:red");
   assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue");
+});
+
+test("offers only the approved blue presets", () => {
+  assert.deepEqual(
+    getThemePresets("blue").map((preset) => preset.name),
+    ["清爽蓝", "天空蓝"],
+  );
 });

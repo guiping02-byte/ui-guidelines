@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   defaultPalettes,
+  getThemePresets,
   mix,
   normalizeHex,
   serializeTokens,
@@ -13,19 +14,6 @@ import {
 } from "./palette";
 
 const THEME_KEY = "ui-board-theme";
-
-const themePresets: Record<ThemeId, Array<{ name: string; note: string; colors: Palette }>> = {
-  red: [
-    { name: "规范默认", note: "稳重品牌红", colors: defaultPalettes.red },
-    { name: "柔和莓红", note: "亲和内容型", colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2" } },
-    { name: "暖珊瑚", note: "活力电商型", colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0" } },
-  ],
-  blue: [
-    { name: "清爽蓝", note: "明快通用型", colors: defaultPalettes.blue },
-    { name: "天空蓝", note: "轻盈服务型", colors: { brand: "#148EEA", price: "#1266C7", promo: "#0086D9", member: "#164A7B", care: "#62B8F5" } },
-    { name: "钴石蓝", note: "稳重专业型", colors: { brand: "#3767E8", price: "#2954C8", promo: "#4169D8", member: "#233B78", care: "#7B9CF4" } },
-  ],
-};
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -62,7 +50,7 @@ export default function Home() {
   const [hydrated, setHydrated] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const palette = palettes[theme];
-  const presets = themePresets[theme];
+  const presets = getThemePresets(theme);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
