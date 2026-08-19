@@ -17,6 +17,14 @@ import {
 const THEME_KEY = "ui-board-theme";
 const WORK_TYPES = ["全职", "兼职", "校招", "实习"];
 const JOB_ROLES = ["文员", "行政", "运营", "销售", "客服", "设计"];
+const TYPOGRAPHY_SPECS = [
+  { sample: "页面标题", className: "type-page", size: "24px / 32px", weight: "Medium / 600", usage: "一级页面标题、详情页标题" },
+  { sample: "模块标题", className: "type-section", size: "20px / 28px", weight: "Medium / 600", usage: "卡片标题、弹窗标题、运营区标题" },
+  { sample: "区块标题", className: "type-subsection", size: "16px / 24px", weight: "Medium / 600", usage: "表单分组、列表区块标题" },
+  { sample: "正文文字", className: "type-body", size: "14px / 22px", weight: "Regular / 400", usage: "商品信息、表单内容、列表正文" },
+  { sample: "辅助说明", className: "type-caption", size: "12px / 20px", weight: "Regular / 400", usage: "注释、帮助、时间与状态说明" },
+  { sample: "按钮文字", className: "type-action", size: "14px / 22px", weight: "Medium / 600", usage: "主次按钮、筛选项和操作入口" },
+];
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -203,12 +211,24 @@ export default function Home() {
 
           <div className="component-grid">
             <article className="component-card typography-card">
-              <span className="section-label">TYPOGRAPHY</span><h3>文字层级</h3>
-              <div className="type-row"><b className="type-page">页面标题</b><span>24 / 32 · 600</span></div>
-              <div className="type-row"><b className="type-section">模块标题</b><span>20 / 28 · 600</span></div>
-              <div className="type-row"><b className="type-subsection">区块标题</b><span>16 / 24 · 600</span></div>
-              <div className="type-row"><b className="type-body">正文信息清晰易读</b><span>14 / 22 · 400</span></div>
-              <div className="type-row"><b className="type-caption">辅助说明与备注</b><span>12 / 20 · 400</span></div>
+              <span className="section-label">TYPOGRAPHY</span><h3>字体规范</h3>
+              <p className="typography-note">先确认字号、字重与使用场景，字体颜色将在下一步补充。</p>
+              <div className="typography-table-wrap">
+                <table className="typography-table">
+                  <thead><tr><th scope="col">示例</th><th scope="col">字号 / 行高</th><th scope="col">字重</th><th scope="col">字体颜色</th><th scope="col">用途</th></tr></thead>
+                  <tbody>
+                    {TYPOGRAPHY_SPECS.map((item) => (
+                      <tr key={item.sample}>
+                        <td><span className={`type-sample ${item.className}`}>{item.sample}</span></td>
+                        <td><code>{item.size}</code></td>
+                        <td><span className="type-weight">{item.weight}</span></td>
+                        <td><span className="type-color-pending"><i aria-hidden="true" />待定义</span></td>
+                        <td>{item.usage}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </article>
 
             <article className="component-card">

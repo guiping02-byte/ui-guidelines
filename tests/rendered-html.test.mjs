@@ -73,3 +73,18 @@ test("renders selected and unselected choice controls", async () => {
   assert.match(html, /<button[^>]*aria-pressed="true"[^>]*>运营<\/button>/);
   assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>客服<\/button>/);
 });
+
+test("renders a complete typography specification with colors deferred", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /字体规范/);
+  for (const heading of ["示例", "字号 / 行高", "字重", "字体颜色", "用途"]) {
+    assert.match(html, new RegExp(heading));
+  }
+  assert.match(html, /24px \/ 32px/);
+  assert.match(html, /Medium \/ 600/);
+  assert.match(html, /Regular \/ 400/);
+  assert.match(html, /一级页面标题、详情页标题/);
+  assert.equal((html.match(/待定义/g) ?? []).length, 6);
+});
