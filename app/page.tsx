@@ -15,6 +15,8 @@ import {
 } from "./palette";
 
 const THEME_KEY = "ui-board-theme";
+const WORK_TYPES = ["全职", "兼职", "校招", "实习"];
+const JOB_ROLES = ["文员", "行政", "运营", "销售", "客服", "设计"];
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -50,6 +52,8 @@ export default function Home() {
   const [palettes, setPalettes] = useState<Record<ThemeId, Palette>>(defaultPalettes);
   const [hydrated, setHydrated] = useState(false);
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
+  const [workType, setWorkType] = useState("全职");
+  const [jobRoles, setJobRoles] = useState(["运营", "销售"]);
   const palette = palettes[theme];
   const presets = getThemePresets(theme);
   const colorControls = getThemeColorControls(theme);
@@ -130,6 +134,10 @@ export default function Home() {
     window.setTimeout(() => setCopyState("idle"), 1700);
   }
 
+  function toggleJobRole(role: string) {
+    setJobRoles((current) => current.includes(role) ? current.filter((item) => item !== role) : [...current, role]);
+  }
+
   return (
     <main className="app-shell" style={style}>
       <header className="topbar">
@@ -207,6 +215,22 @@ export default function Home() {
               <span className="section-label">ACTIONS</span><h3>按钮与输入</h3>
               <div className="button-stack"><button className="demo-primary" type="button">主要操作</button><button className="demo-secondary" type="button">次要操作</button><button className="demo-soft" type="button">轻量按钮</button><button className="demo-disabled" type="button" disabled>暂不可用</button></div>
               <label className="search-box"><span aria-hidden="true">⌕</span><input aria-label="搜索示例" placeholder="搜索商品、育儿内容" /></label>
+            </article>
+
+            <article className="component-card selection-card">
+              <span className="section-label">SELECTION</span><h3>选择与筛选</h3>
+              <div className="choice-section">
+                <b>单选状态</b>
+                <div className="choice-grid" role="group" aria-label="工作性质单选示例">
+                  {WORK_TYPES.map((item) => <button key={item} className="choice-chip" type="button" aria-pressed={workType === item} onClick={() => setWorkType(item)}>{item}</button>)}
+                </div>
+              </div>
+              <div className="choice-section">
+                <b>多选状态</b>
+                <div className="choice-grid" role="group" aria-label="工作角色多选示例">
+                  {JOB_ROLES.map((item) => <button key={item} className="choice-chip" type="button" aria-pressed={jobRoles.includes(item)} onClick={() => toggleJobRole(item)}>{item}</button>)}
+                </div>
+              </div>
             </article>
 
             <article className="component-card product-card">

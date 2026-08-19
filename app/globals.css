@@ -123,6 +123,15 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .search-box input { min-width: 0; border: 0; outline: 0; color: var(--text-primary); background: transparent; font-size: 14px; }
 .search-box input::placeholder { color: #92969f; }
 
+.selection-card h3 { margin-bottom: 12px; }
+.choice-section + .choice-section { margin-top: 14px; }
+.choice-section > b { display: block; margin-bottom: 7px; color: var(--text-secondary); font-size: 12px; line-height: 20px; }
+.choice-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 7px; }
+.choice-chip { position: relative; min-height: 38px; padding: 0 6px; border: 1px solid transparent; border-radius: 7px; color: #656a73; background: #f4f5f7; font-size: 12px; font-weight: 600; overflow: hidden; }
+.choice-chip:hover { border-color: color-mix(in srgb, var(--brand), white 50%); }
+.choice-chip[aria-pressed="true"] { border-color: var(--brand); color: var(--brand-deep); background: var(--brand-pale); }
+.choice-chip[aria-pressed="true"]::after { content: ""; position: absolute; right: 0; bottom: 0; width: 0; height: 0; border-top: 11px solid transparent; border-right: 11px solid var(--brand); }
+
 .product-card { display: grid; grid-template-columns: 42% 1fr; gap: 14px; background: #fff; }
 .product-visual { position: relative; min-height: 220px; border-radius: 10px; background: linear-gradient(145deg, var(--care-pale), #fff6ef); overflow: hidden; }
 .product-visual::before, .product-visual::after { content: ""; position: absolute; border-radius: 50%; background: color-mix(in srgb, var(--care), white 38%); opacity: .5; }

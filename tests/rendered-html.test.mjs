@@ -62,3 +62,14 @@ test("renders a two-theme switcher with red selected by default", async () => {
   assert.match(html, /<button[^>]*aria-pressed="true"[^>]*>[\s\S]*?红色母婴<\/button>/);
   assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?蓝色通用<\/button>/);
 });
+
+test("renders selected and unselected choice controls", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /选择与筛选/);
+  assert.match(html, /<button[^>]*aria-pressed="true"[^>]*>全职<\/button>/);
+  assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>兼职<\/button>/);
+  assert.match(html, /<button[^>]*aria-pressed="true"[^>]*>运营<\/button>/);
+  assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>客服<\/button>/);
+});
