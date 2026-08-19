@@ -138,7 +138,7 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .price-row > span { font-size: 14px; font-weight: 700; }
 .price-row b { font-size: 28px; line-height: 34px; letter-spacing: -.04em; }
 .price-row del { margin-left: 4px; color: #9a9ea6; font-size: 12px; }
-.member-line { display: flex; gap: 7px; margin-top: 8px; padding: 7px 8px; border-radius: 7px; color: var(--member); background: color-mix(in srgb, var(--member), white 91%); font-size: 12px; line-height: 20px; }
+.member-line { display: flex; gap: 7px; margin-top: 8px; padding: 7px 8px; border-radius: 7px; color: var(--member); background: color-mix(in srgb, var(--accent), white 82%); font-size: 12px; line-height: 20px; }
 
 .care-card { position: relative; background: var(--care-pale); }
 .care-illustration { display: grid; place-items: center; width: 58px; height: 58px; margin: 17px 0 12px; border-radius: 18px 18px 18px 6px; color: #fff; background: var(--care); transform: rotate(-4deg); }

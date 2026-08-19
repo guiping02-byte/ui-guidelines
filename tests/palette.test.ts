@@ -25,7 +25,13 @@ test("accepts only complete valid stored palettes", () => {
     member: "#8f1d22",
     care: "#ff7a90",
   });
-  assert.deepEqual(valid, defaultPalette);
+  assert.deepEqual(valid, {
+    brand: "#D62F36",
+    price: "#F04438",
+    promo: "#FF4D4F",
+    member: "#8F1D22",
+    care: "#FF7A90",
+  });
   assert.equal(validateStoredPalette({ brand: "#D62F36" }), null);
   assert.equal(validateStoredPalette({ ...defaultPalette, care: "pink" }), null);
 });
@@ -39,8 +45,14 @@ test("serializes the current semantic palette as CSS tokens", () => {
       "--color-promo: #FF4D4F;",
       "--color-member: #8F1D22;",
       "--color-care: #FF7A90;",
+      "--color-accent: #DDB65E;",
     ].join("\n"),
   );
+});
+
+test("adds the approved auxiliary gold only to the red theme", () => {
+  assert.equal(defaultPalettes.red.accent, "#DDB65E");
+  assert.equal(defaultPalettes.blue.accent, undefined);
 });
 
 test("keeps red and blue palettes in separate storage slots", () => {
@@ -50,6 +62,7 @@ test("keeps red and blue palettes in separate storage slots", () => {
     promo: "#FF4D4F",
     member: "#8F1D22",
     care: "#FF7A90",
+    accent: "#DDB65E",
   });
   assert.deepEqual(defaultPalettes.blue, {
     brand: "#2388F5",

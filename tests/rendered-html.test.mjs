@@ -36,6 +36,7 @@ test("server-renders the red maternal design board", async () => {
   assert.match(html, /促销红/);
   assert.match(html, /会员深红/);
   assert.match(html, /关怀粉红/);
+  assert.match(html, /辅助金色/);
   assert.doesNotMatch(html, /蓝色设计系统看板|codex-preview|Building your site/i);
 });
 
@@ -43,7 +44,7 @@ test("renders the default semantic palette and representative components", async
   const response = await render();
   const html = await response.text();
 
-  for (const value of ["#D62F36", "#F04438", "#FF4D4F", "#8F1D22", "#FF7A90"]) {
+  for (const value of ["#D62F36", "#F04438", "#FF4D4F", "#8F1D22", "#FF7A90", "#DDB65E"]) {
     assert.match(html, new RegExp(value, "i"));
   }
   assert.match(html, /安心成长提醒/);

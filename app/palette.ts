@@ -4,6 +4,7 @@ export type Palette = {
   promo: string;
   member: string;
   care: string;
+  accent?: string;
 };
 
 export type ThemeId = "red" | "blue";
@@ -21,6 +22,7 @@ export const defaultPalettes: Record<ThemeId, Palette> = {
     promo: "#FF4D4F",
     member: "#8F1D22",
     care: "#FF7A90",
+    accent: "#DDB65E",
   },
   blue: {
     brand: "#2388F5",
@@ -36,8 +38,8 @@ export const defaultPalette = defaultPalettes.red;
 const themePresets: Record<ThemeId, PalettePreset[]> = {
   red: [
     { name: "规范默认", note: "稳重品牌红", colors: defaultPalettes.red },
-    { name: "柔和莓红", note: "亲和内容型", colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2" } },
-    { name: "暖珊瑚", note: "活力电商型", colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0" } },
+    { name: "柔和莓红", note: "亲和内容型", colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2", accent: "#DDB65E" } },
+    { name: "暖珊瑚", note: "活力电商型", colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0", accent: "#DDB65E" } },
   ],
   blue: [
     { name: "清爽蓝", note: "明快通用型", colors: defaultPalettes.blue },
@@ -66,7 +68,10 @@ export function validateStoredPalette(value: unknown): Palette | null {
   const record = value as Record<string, unknown>;
   const entries = paletteKeys.map((key) => [key, normalizeHex(record[key])]);
   if (entries.some(([, color]) => color === null)) return null;
-  return Object.fromEntries(entries) as Palette;
+  const palette = Object.fromEntries(entries) as Palette;
+  if (record.accent === undefined) return palette;
+  const accent = normalizeHex(record.accent);
+  return accent ? { ...palette, accent } : null;
 }
 
 export function mix(hex: string, target: string, amount: number) {
@@ -81,13 +86,15 @@ export function mix(hex: string, target: string, amount: number) {
 }
 
 export function serializeTokens(palette: Palette) {
-  return [
+  const tokens = [
     `--color-brand-primary: ${palette.brand};`,
     `--color-price: ${palette.price};`,
     `--color-promo: ${palette.promo};`,
     `--color-member: ${palette.member};`,
     `--color-care: ${palette.care};`,
-  ].join("\n");
+  ];
+  if (palette.accent) tokens.push(`--color-accent: ${palette.accent};`);
+  return tokens.join("\n");
 }
 
 export function storageKeyForTheme(theme: ThemeId) {

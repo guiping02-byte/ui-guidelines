@@ -59,7 +59,8 @@ export default function Home() {
         const saved = window.localStorage.getItem(storageKeyForTheme(themeId));
         if (saved) {
           try {
-            loaded[themeId] = validateStoredPalette(JSON.parse(saved)) ?? defaultPalettes[themeId];
+            const validated = validateStoredPalette(JSON.parse(saved));
+            loaded[themeId] = validated ? { ...defaultPalettes[themeId], ...validated } : defaultPalettes[themeId];
           } catch {
             loaded[themeId] = defaultPalettes[themeId];
           }
@@ -103,6 +104,7 @@ export default function Home() {
     "--member": palette.member,
     "--care": palette.care,
     "--care-pale": mix(palette.care, "#FFFFFF", 0.9),
+    "--accent": palette.accent ?? palette.member,
   } as React.CSSProperties;
 
   function updateColor(key: keyof Palette, value: string) {
@@ -158,6 +160,7 @@ export default function Home() {
             <ColorControl key={`promo-${palette.promo}`} label="促销红" description="优惠券、秒杀、满减" value={palette.promo} onChange={(value) => updateColor("promo", value)} />
             <ColorControl key={`member-${palette.member}`} label="会员深红" description="VIP 权益、会员专享" value={palette.member} onChange={(value) => updateColor("member", value)} />
             <ColorControl key={`care-${palette.care}`} label="关怀粉红" description="成长提醒、育儿内容" value={palette.care} onChange={(value) => updateColor("care", value)} />
+            {theme === "red" && palette.accent && <ColorControl key={`accent-${palette.accent}`} label="辅助金色" description="会员权益、品质背书、强调信息" value={palette.accent} onChange={(value) => updateColor("accent", value)} />}
           </div>
 
           <section className="preset-section" aria-label="快速试色方案">
@@ -165,7 +168,7 @@ export default function Home() {
             <div className="preset-list">
               {presets.map((preset) => (
                 <button key={preset.name} type="button" className="preset-button" onClick={() => applyPalette(preset.colors)}>
-                  <span className="preset-colors" aria-hidden="true"><i style={{ background: preset.colors.brand }} /><i style={{ background: preset.colors.price }} /><i style={{ background: preset.colors.care }} /></span>
+                  <span className="preset-colors" aria-hidden="true"><i style={{ background: preset.colors.brand }} /><i style={{ background: preset.colors.price }} /><i style={{ background: preset.colors.accent ?? preset.colors.care }} /></span>
                   <span><b>{preset.name}</b><small>{preset.note}</small></span>
                 </button>
               ))}
