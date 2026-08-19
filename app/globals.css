@@ -131,6 +131,12 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .demo-primary { grid-column: span 2; border: 0; color: #fff; background: var(--brand); }
 .demo-primary:hover { background: color-mix(in srgb, var(--brand), white 16%); }
 .demo-primary:active { background: var(--brand-deep); }
+.app-shell[data-theme="blue"] .copy-button,
+.app-shell[data-theme="blue"] .demo-primary { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); box-shadow: 0 8px 22px color-mix(in srgb, var(--gradient-end), transparent 72%); }
+.app-shell[data-theme="blue"] .copy-button:hover,
+.app-shell[data-theme="blue"] .demo-primary:hover { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); filter: brightness(1.06); transform: translateY(-1px); }
+.app-shell[data-theme="blue"] .copy-button:active,
+.app-shell[data-theme="blue"] .demo-primary:active { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); filter: brightness(.94); transform: translateY(0); }
 .demo-secondary { border: 1px solid var(--brand); color: var(--brand-deep); background: #fff; }
 .demo-soft { border: 0; color: var(--brand-deep); background: var(--brand-soft); }
 .demo-disabled { border: 1px solid #e5e6eb; color: #a7abb3; background: #f2f3f5; cursor: not-allowed; }

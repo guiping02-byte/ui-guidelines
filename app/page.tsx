@@ -119,6 +119,8 @@ export default function Home() {
     "--care": palette.care,
     "--care-pale": mix(palette.care, "#FFFFFF", 0.9),
     "--accent": palette.accent ?? palette.member,
+    "--gradient-start": palette.gradientStart ?? palette.brand,
+    "--gradient-end": palette.gradientEnd ?? palette.brand,
   } as React.CSSProperties;
 
   function updateColor(key: keyof Palette, value: string) {
@@ -147,7 +149,7 @@ export default function Home() {
   }
 
   return (
-    <main className="app-shell" style={style}>
+    <main className="app-shell" data-theme={theme} style={style}>
       <header className="topbar">
         <div>
           <p className="eyebrow">MATERNAL &amp; BABY · MINI PROGRAM UI KIT</p>

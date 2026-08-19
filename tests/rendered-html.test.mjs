@@ -63,6 +63,13 @@ test("renders a two-theme switcher with red selected by default", async () => {
   assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>[\s\S]*?蓝色通用<\/button>/);
 });
 
+test("marks the active theme so gradient styling stays blue-only", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /<main[^>]*data-theme="red"/);
+});
+
 test("renders selected and unselected choice controls", async () => {
   const response = await render();
   const html = await response.text();

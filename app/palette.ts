@@ -5,6 +5,8 @@ export type Palette = {
   member: string;
   care: string;
   accent?: string;
+  gradientStart?: string;
+  gradientEnd?: string;
 };
 
 export type ThemeId = "red" | "blue";
@@ -36,6 +38,8 @@ export const defaultPalettes: Record<ThemeId, Palette> = {
     promo: "#FF6A2A",
     member: "#183B6B",
     care: "#22B8E6",
+    gradientStart: "#22B8E6",
+    gradientEnd: "#1677FF",
   },
 };
 
@@ -65,6 +69,8 @@ const themeColorControls: Record<ThemeId, PaletteControl[]> = {
     { key: "promo", label: "奖励橙", description: "积分奖励、业务入口、提示" },
     { key: "member", label: "金融深蓝", description: "标题、图标描边、专业信息" },
     { key: "care", label: "科技青", description: "渐变高光、服务图标、背景氛围" },
+    { key: "gradientStart", label: "渐变起始色", description: "蓝色按钮左上方高光" },
+    { key: "gradientEnd", label: "渐变结束色", description: "蓝色按钮右下方主色" },
   ],
 };
 
@@ -93,10 +99,23 @@ export function validateStoredPalette(value: unknown): Palette | null {
   const record = value as Record<string, unknown>;
   const entries = paletteKeys.map((key) => [key, normalizeHex(record[key])]);
   if (entries.some(([, color]) => color === null)) return null;
-  const palette = Object.fromEntries(entries) as Palette;
-  if (record.accent === undefined) return palette;
-  const accent = normalizeHex(record.accent);
-  return accent ? { ...palette, accent } : null;
+  let palette = Object.fromEntries(entries) as Palette;
+  if (record.accent !== undefined) {
+    const accent = normalizeHex(record.accent);
+    if (!accent) return null;
+    palette = { ...palette, accent };
+  }
+
+  const hasGradientStart = record.gradientStart !== undefined;
+  const hasGradientEnd = record.gradientEnd !== undefined;
+  if (hasGradientStart !== hasGradientEnd) return null;
+  if (hasGradientStart && hasGradientEnd) {
+    const gradientStart = normalizeHex(record.gradientStart);
+    const gradientEnd = normalizeHex(record.gradientEnd);
+    if (!gradientStart || !gradientEnd) return null;
+    palette = { ...palette, gradientStart, gradientEnd };
+  }
+  return palette;
 }
 
 export function mix(hex: string, target: string, amount: number) {
@@ -119,6 +138,13 @@ export function serializeTokens(palette: Palette) {
     `--color-care: ${palette.care};`,
   ];
   if (palette.accent) tokens.push(`--color-accent: ${palette.accent};`);
+  if (palette.gradientStart && palette.gradientEnd) {
+    tokens.push(
+      `--color-gradient-start: ${palette.gradientStart};`,
+      `--color-gradient-end: ${palette.gradientEnd};`,
+      "--gradient-primary: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));",
+    );
+  }
   return tokens.join("\n");
 }
 

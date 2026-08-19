@@ -71,6 +71,8 @@ test("keeps red and blue palettes in separate storage slots", () => {
     promo: "#FF6A2A",
     member: "#183B6B",
     care: "#22B8E6",
+    gradientStart: "#22B8E6",
+    gradientEnd: "#1677FF",
   });
   assert.equal(storageKeyForTheme("red"), "maternal-ui-palette:red");
   assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue:fintech-v1");
@@ -94,6 +96,8 @@ test("uses reference-matched semantic labels for the blue editor", () => {
       ["promo", "奖励橙"],
       ["member", "金融深蓝"],
       ["care", "科技青"],
+      ["gradientStart", "渐变起始色"],
+      ["gradientEnd", "渐变结束色"],
     ],
   );
 });
@@ -103,4 +107,45 @@ test("offers only the default red preset", () => {
     getThemePresets("red").map((preset) => preset.name),
     ["规范默认"],
   );
+});
+
+test("adds editable gradient stops only to the blue theme", () => {
+  assert.equal(defaultPalettes.red.gradientStart, undefined);
+  assert.equal(defaultPalettes.red.gradientEnd, undefined);
+  assert.equal(defaultPalettes.blue.gradientStart, "#22B8E6");
+  assert.equal(defaultPalettes.blue.gradientEnd, "#1677FF");
+
+  const getThemeColorControls = paletteModule.getThemeColorControls;
+  assert.deepEqual(
+    getThemeColorControls("blue").slice(-2).map((control) => [control.key, control.label]),
+    [
+      ["gradientStart", "渐变起始色"],
+      ["gradientEnd", "渐变结束色"],
+    ],
+  );
+  assert.equal(getThemeColorControls("red").some((control) => control.key.startsWith("gradient")), false);
+});
+
+test("serializes the blue gradient as reusable CSS tokens", () => {
+  assert.equal(
+    serializeTokens(defaultPalettes.blue),
+    [
+      "--color-brand-primary: #1677FF;",
+      "--color-price: #D9363E;",
+      "--color-promo: #FF6A2A;",
+      "--color-member: #183B6B;",
+      "--color-care: #22B8E6;",
+      "--color-gradient-start: #22B8E6;",
+      "--color-gradient-end: #1677FF;",
+      "--gradient-primary: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));",
+    ].join("\n"),
+  );
+  assert.doesNotMatch(serializeTokens(defaultPalettes.red), /gradient/i);
+});
+
+test("persists complete gradient pairs and rejects incomplete ones", () => {
+  assert.deepEqual(validateStoredPalette(defaultPalettes.blue), defaultPalettes.blue);
+
+  assert.equal(validateStoredPalette({ ...defaultPalettes.blue, gradientEnd: undefined }), null);
+  assert.equal(validateStoredPalette({ ...defaultPalettes.blue, gradientStart: "cyan" }), null);
 });
