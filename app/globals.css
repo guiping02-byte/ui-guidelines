@@ -219,6 +219,8 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .nav-demo b { font-size: 12px; line-height: 20px; }
 .nav-demo .active { color: var(--brand-deep); }
 .nav-demo .active i { color: #fff; background: var(--brand); }
+.app-shell[data-theme="blue"] .nav-demo .active { color: var(--gradient-end); }
+.app-shell[data-theme="blue"] .nav-demo .active i { background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end)); box-shadow: 0 6px 14px color-mix(in srgb, var(--gradient-end), transparent 72%); }
 .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
 .tag { padding: 5px 9px; border-radius: 999px; font-size: 12px; line-height: 20px; font-weight: 700; }
 .brand-tag { color: var(--brand-deep); background: var(--brand-soft); }
