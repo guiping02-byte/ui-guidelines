@@ -38,8 +38,6 @@ export const defaultPalette = defaultPalettes.red;
 const themePresets: Record<ThemeId, PalettePreset[]> = {
   red: [
     { name: "规范默认", note: "稳重品牌红", colors: defaultPalettes.red },
-    { name: "柔和莓红", note: "亲和内容型", colors: { brand: "#C83D55", price: "#E94B4B", promo: "#F25F5C", member: "#7D2033", care: "#F28BA2", accent: "#DDB65E" } },
-    { name: "暖珊瑚", note: "活力电商型", colors: { brand: "#D94A42", price: "#ED4D3D", promo: "#FF6248", member: "#8A2B28", care: "#FF8CA0", accent: "#DDB65E" } },
   ],
   blue: [
     { name: "清爽蓝", note: "明快通用型", colors: defaultPalettes.blue },

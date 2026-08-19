@@ -81,3 +81,10 @@ test("offers only the approved blue presets", () => {
     ["清爽蓝", "天空蓝"],
   );
 });
+
+test("offers only the default red preset", () => {
+  assert.deepEqual(
+    getThemePresets("red").map((preset) => preset.name),
+    ["规范默认"],
+  );
+});
