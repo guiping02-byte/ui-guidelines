@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import * as paletteModule from "../app/palette.ts";
 
 import {
   defaultPalette,
@@ -65,20 +66,35 @@ test("keeps red and blue palettes in separate storage slots", () => {
     accent: "#DDB65E",
   });
   assert.deepEqual(defaultPalettes.blue, {
-    brand: "#2388F5",
-    price: "#1967D2",
-    promo: "#0077CC",
-    member: "#173B70",
-    care: "#55A9F8",
+    brand: "#1677FF",
+    price: "#D9363E",
+    promo: "#FF6A2A",
+    member: "#183B6B",
+    care: "#22B8E6",
   });
   assert.equal(storageKeyForTheme("red"), "maternal-ui-palette:red");
-  assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue");
+  assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue:fintech-v1");
 });
 
-test("offers only the approved blue presets", () => {
+test("offers one reference-matched fintech blue preset", () => {
   assert.deepEqual(
     getThemePresets("blue").map((preset) => preset.name),
-    ["清爽蓝", "天空蓝"],
+    ["金融科技蓝"],
+  );
+});
+
+test("uses reference-matched semantic labels for the blue editor", () => {
+  const getThemeColorControls = paletteModule.getThemeColorControls;
+  assert.equal(typeof getThemeColorControls, "function");
+  assert.deepEqual(
+    getThemeColorControls?.("blue").map((control) => [control.key, control.label]),
+    [
+      ["brand", "主蓝"],
+      ["price", "收益红"],
+      ["promo", "奖励橙"],
+      ["member", "金融深蓝"],
+      ["care", "科技青"],
+    ],
   );
 });
 

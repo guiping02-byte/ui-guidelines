@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   defaultPalettes,
+  getThemeColorControls,
   getThemePresets,
   mix,
   normalizeHex,
@@ -51,6 +52,7 @@ export default function Home() {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const palette = palettes[theme];
   const presets = getThemePresets(theme);
+  const colorControls = getThemeColorControls(theme);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -150,17 +152,15 @@ export default function Home() {
       <div className="workspace">
         <aside className="editor-panel" aria-label="颜色编辑区">
           <div className="panel-heading">
-            <div><span className="step">01</span><div><h2>调整语义色</h2><p>每种红色负责不同业务信息</p></div></div>
+            <div><span className="step">01</span><div><h2>调整语义色</h2><p>{theme === "red" ? "每种红色负责不同业务信息" : "参考金融科技界面的多色搭配"}</p></div></div>
             <button className="reset-button" type="button" onClick={() => applyPalette(defaultPalettes[theme])}>恢复规范默认值</button>
           </div>
 
           <div className="controls">
-            <ColorControl key={`brand-${palette.brand}`} label="品牌主色" description="品牌、主按钮、选中态" value={palette.brand} onChange={(value) => updateColor("brand", value)} />
-            <ColorControl key={`price-${palette.price}`} label="价格红" description="商品价格、到手价" value={palette.price} onChange={(value) => updateColor("price", value)} />
-            <ColorControl key={`promo-${palette.promo}`} label="促销红" description="优惠券、秒杀、满减" value={palette.promo} onChange={(value) => updateColor("promo", value)} />
-            <ColorControl key={`member-${palette.member}`} label="会员深红" description="VIP 权益、会员专享" value={palette.member} onChange={(value) => updateColor("member", value)} />
-            <ColorControl key={`care-${palette.care}`} label="关怀粉红" description="成长提醒、育儿内容" value={palette.care} onChange={(value) => updateColor("care", value)} />
-            {theme === "red" && palette.accent && <ColorControl key={`accent-${palette.accent}`} label="辅助金色" description="会员权益、品质背书、强调信息" value={palette.accent} onChange={(value) => updateColor("accent", value)} />}
+            {colorControls.map((control) => {
+              const value = palette[control.key];
+              return value ? <ColorControl key={`${control.key}-${value}`} label={control.label} description={control.description} value={value} onChange={(nextValue) => updateColor(control.key, nextValue)} /> : null;
+            })}
           </div>
 
           <section className="preset-section" aria-label="快速试色方案">

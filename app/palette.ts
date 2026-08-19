@@ -15,6 +15,12 @@ export type PalettePreset = {
   colors: Palette;
 };
 
+export type PaletteControl = {
+  key: keyof Palette;
+  label: string;
+  description: string;
+};
+
 export const defaultPalettes: Record<ThemeId, Palette> = {
   red: {
     brand: "#D62F36",
@@ -25,11 +31,11 @@ export const defaultPalettes: Record<ThemeId, Palette> = {
     accent: "#DDB65E",
   },
   blue: {
-    brand: "#2388F5",
-    price: "#1967D2",
-    promo: "#0077CC",
-    member: "#173B70",
-    care: "#55A9F8",
+    brand: "#1677FF",
+    price: "#D9363E",
+    promo: "#FF6A2A",
+    member: "#183B6B",
+    care: "#22B8E6",
   },
 };
 
@@ -40,13 +46,34 @@ const themePresets: Record<ThemeId, PalettePreset[]> = {
     { name: "规范默认", note: "稳重品牌红", colors: defaultPalettes.red },
   ],
   blue: [
-    { name: "清爽蓝", note: "明快通用型", colors: defaultPalettes.blue },
-    { name: "天空蓝", note: "轻盈服务型", colors: { brand: "#148EEA", price: "#1266C7", promo: "#0086D9", member: "#164A7B", care: "#62B8F5" } },
+    { name: "金融科技蓝", note: "参考图同款", colors: defaultPalettes.blue },
+  ],
+};
+
+const themeColorControls: Record<ThemeId, PaletteControl[]> = {
+  red: [
+    { key: "brand", label: "品牌主色", description: "品牌、主按钮、选中态" },
+    { key: "price", label: "价格红", description: "商品价格、到手价" },
+    { key: "promo", label: "促销红", description: "优惠券、秒杀、满减" },
+    { key: "member", label: "会员深红", description: "VIP 权益、会员专享" },
+    { key: "care", label: "关怀粉红", description: "成长提醒、育儿内容" },
+    { key: "accent", label: "辅助金色", description: "会员权益、品质背书、强调信息" },
+  ],
+  blue: [
+    { key: "brand", label: "主蓝", description: "主按钮、标签选中、导航激活" },
+    { key: "price", label: "收益红", description: "收益数字、上涨、重要提醒" },
+    { key: "promo", label: "奖励橙", description: "积分奖励、业务入口、提示" },
+    { key: "member", label: "金融深蓝", description: "标题、图标描边、专业信息" },
+    { key: "care", label: "科技青", description: "渐变高光、服务图标、背景氛围" },
   ],
 };
 
 export function getThemePresets(theme: ThemeId) {
   return themePresets[theme];
+}
+
+export function getThemeColorControls(theme: ThemeId) {
+  return themeColorControls[theme];
 }
 
 const paletteKeys: Array<keyof Palette> = ["brand", "price", "promo", "member", "care"];
@@ -96,5 +123,5 @@ export function serializeTokens(palette: Palette) {
 }
 
 export function storageKeyForTheme(theme: ThemeId) {
-  return `maternal-ui-palette:${theme}`;
+  return theme === "blue" ? "maternal-ui-palette:blue:fintech-v1" : "maternal-ui-palette:red";
 }
