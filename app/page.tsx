@@ -25,6 +25,10 @@ const TYPOGRAPHY_SPECS = [
   { sample: "辅助说明", className: "type-caption", size: "12px / 20px", weight: "Regular / 400", usage: "注释、帮助、时间与状态说明" },
   { sample: "按钮文字", className: "type-action", size: "14px / 22px", weight: "Medium / 600", usage: "主次按钮、筛选项和操作入口" },
 ];
+const RADIUS_SPECS = [
+  { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
+  { token: "--radius-medium", value: "8px", label: "中圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
+];
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -230,6 +234,19 @@ export default function Home() {
                     ))}
                   </tbody>
                 </table>
+              </div>
+            </article>
+
+            <article className="component-card radius-card">
+              <span className="section-label">BORDER RADIUS</span><h3>圆角规范</h3>
+              <p className="radius-note">矩形组件统一使用两档圆角；圆形图标与胶囊标签保留特殊形状。</p>
+              <div className="radius-grid">
+                {RADIUS_SPECS.map((item) => (
+                  <div className="radius-item" key={item.token}>
+                    <div className={`radius-demo ${item.className}`}><b>{item.value}</b></div>
+                    <div className="radius-copy"><strong>{item.label}</strong><code>{item.token}</code><small>{item.usage}</small></div>
+                  </div>
+                ))}
               </div>
             </article>
 

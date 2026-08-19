@@ -145,6 +145,10 @@ export function serializeTokens(palette: Palette) {
       "--gradient-primary: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));",
     );
   }
+  tokens.push(
+    "--radius-small: 4px;",
+    "--radius-medium: 8px;",
+  );
   return tokens.join("\n");
 }
 

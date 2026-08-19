@@ -95,3 +95,16 @@ test("renders a complete typography specification with colors deferred", async (
   assert.match(html, /一级页面标题、详情页标题/);
   assert.equal((html.match(/待定义/g) ?? []).length, 6);
 });
+
+test("renders the approved 4px and 8px radius guidelines", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /圆角规范/);
+  assert.match(html, /--radius-small/);
+  assert.match(html, />4px</);
+  assert.match(html, /--radius-medium/);
+  assert.match(html, />8px</);
+  assert.match(html, /促销标签、状态标识、小型信息块/);
+  assert.match(html, /按钮、输入框、选择项、卡片内部容器/);
+});
