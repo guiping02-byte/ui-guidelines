@@ -29,6 +29,14 @@ const RADIUS_SPECS = [
   { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
   { token: "--radius-medium", value: "8px", label: "中圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
 ];
+const RED_SEMANTIC_SPECS: Array<{ key: keyof Palette; role: string; usage: string; reference: string }> = [
+  { key: "brand", role: "品牌主红", usage: "选中导航、页签、主要按钮、关键入口", reference: "爆料、卡券、立即使用、底部导航选中" },
+  { key: "price", role: "价格红", usage: "价格、收益、补贴、优惠金额", reference: "¥32.93、59.9元、佣金、达标补贴" },
+  { key: "promo", role: "促销亮红", usage: "促销标签、领取按钮、分享按钮、活动提醒", reference: "历史最低、领券购买、推广赚" },
+  { key: "member", role: "会员深红", usage: "强调标题、描边按钮、会员与重要业务文字", reference: "达标补贴、立即报名、提现按钮" },
+  { key: "care", role: "关怀浅粉", usage: "页面头部氛围、信息背景、图标底色", reference: "顶部渐变、收益区域背景、功能图标背景" },
+  { key: "accent", role: "辅助金色", usage: "会员、奖励、品质、权益", reference: "超级会员、升级、奖励、优惠标签" },
+];
 
 function ColorControl({ label, description, value, onChange }: {
   label: string;
@@ -214,6 +222,33 @@ export default function Home() {
               ))}
             </div>
           </section>
+
+          {theme === "red" && (
+            <section className="semantic-card" aria-label="红色语义分层">
+              <div className="semantic-heading">
+                <div><span className="section-label">SEMANTIC RED USAGE</span><h3>红色语义分层</h3></div>
+                <p>红色用于关键状态与利益信息，正文保持黑灰色，容器以白色或浅粉色为主。</p>
+              </div>
+              <div className="semantic-table-wrap">
+                <table className="semantic-table">
+                  <thead><tr><th scope="col">颜色角色</th><th scope="col">用途</th><th scope="col">参考表现</th></tr></thead>
+                  <tbody>
+                    {RED_SEMANTIC_SPECS.map((item) => {
+                      const color = palette[item.key] ?? palette.brand;
+                      return (
+                        <tr key={item.role}>
+                          <td data-label="颜色角色"><span className="semantic-role"><i style={{ background: color }} aria-hidden="true" /><span><strong>{item.role}</strong><code>{color}</code></span></span></td>
+                          <td data-label="用途">{item.usage}</td>
+                          <td data-label="参考表现">{item.reference}</td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+              <p className="semantic-guardrail"><b>限制说明</b>红橙渐变仅限营销素材，不纳入红色组件 Token。</p>
+            </section>
+          )}
 
           <div className="component-grid">
             <article className="component-card typography-card">
