@@ -134,6 +134,9 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .type-caption { font-size: 12px; line-height: 20px; font-weight: 400; }
 .type-action { font-size: 14px; line-height: 22px; font-weight: 600; }
 .type-weight { color: #4e545e; font-weight: 600; }
+.type-color-value { display: inline-flex; align-items: center; gap: 7px; }
+.type-color-value i { width: 30px; height: 22px; border: 1px solid rgba(31,35,41,.1); border-radius: var(--radius-small); }
+.typography-table .type-color-value code { color: #4e545e; }
 .type-color-pending { display: inline-flex; align-items: center; gap: 7px; padding: 4px 8px; border-radius: var(--radius-small); color: #858b96; background: #f4f5f7; font-size: 12px; font-weight: 600; }
 .type-color-pending i { width: 13px; height: 13px; border: 1px dashed #a8adb6; border-radius: var(--radius-small); background: #fff; }
 

@@ -81,7 +81,7 @@ test("renders selected and unselected choice controls", async () => {
   assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>客服<\/button>/);
 });
 
-test("renders a complete typography specification with colors deferred", async () => {
+test("renders the approved red typography color hierarchy", async () => {
   const response = await render();
   const html = await response.text();
 
@@ -93,7 +93,23 @@ test("renders a complete typography specification with colors deferred", async (
   assert.match(html, /Medium \/ 600/);
   assert.match(html, /Regular \/ 400/);
   assert.match(html, /一级页面标题、详情页标题/);
-  assert.equal((html.match(/待定义/g) ?? []).length, 6);
+  assert.match(html, /红色主题字体采用黑灰层级/);
+
+  const expectedColors = new Map([
+    ["页面标题", "#222222"],
+    ["模块标题", "#222222"],
+    ["区块标题", "#222222"],
+    ["正文文字", "#666666"],
+    ["辅助说明", "#999999"],
+    ["按钮文字", "#222222"],
+  ]);
+  const rows = [...html.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map((match) => match[1]);
+  for (const [sample, color] of expectedColors) {
+    const row = rows.find((candidate) => candidate.includes(sample));
+    assert.ok(row, `missing typography row for ${sample}`);
+    assert.match(row, new RegExp(color));
+  }
+  assert.doesNotMatch(html, /待定义/);
 });
 
 test("renders the approved 4px and 8px radius guidelines", async () => {
