@@ -112,6 +112,17 @@ test("renders the approved red typography color hierarchy", async () => {
   assert.doesNotMatch(html, /待定义/);
 });
 
+test("renders the approved red page background color", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  const block = html.match(/<section class="background-color-spec"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(block, "missing page background color specification");
+  assert.match(block, /页面背景色/);
+  assert.match(block, /#FAFAFA/);
+  assert.match(block, /页面整体背景、内容区域底色/);
+});
+
 test("renders the approved 4px and 8px radius guidelines", async () => {
   const response = await render();
   const html = await response.text();

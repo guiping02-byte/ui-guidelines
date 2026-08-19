@@ -241,6 +241,12 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
+              {theme === "red" && (
+                <section className="background-color-spec" aria-label="页面背景色规范">
+                  <span className="background-color-copy"><b>页面背景色</b><small>页面整体背景、内容区域底色</small></span>
+                  <span className="background-color-value"><i aria-hidden="true" /><code>#FAFAFA</code></span>
+                </section>
+              )}
             </article>
 
             <article className="component-card radius-card">
