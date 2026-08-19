@@ -33,9 +33,9 @@ test("server-renders the red maternal design board", async () => {
   assert.match(html, /直接修改色号，组件会实时更新/);
   assert.match(html, /品牌主色/);
   assert.match(html, /价格红/);
-  assert.match(html, /促销红/);
+  assert.match(html, /促销亮红/);
   assert.match(html, /会员深红/);
-  assert.match(html, /关怀粉红/);
+  assert.match(html, /关怀浅粉/);
   assert.match(html, /辅助金色/);
   assert.doesNotMatch(html, /蓝色设计系统看板|codex-preview|Building your site/i);
 });
@@ -109,19 +109,16 @@ test("renders the approved 4px and 8px radius guidelines", async () => {
   assert.match(html, /按钮、输入框、选择项、卡片内部容器/);
 });
 
-test("renders the approved red semantic color roles and reference usage", async () => {
+test("merges red semantic details into the left editor without duplicate content", async () => {
   const response = await render();
   const html = await response.text();
 
-  assert.match(html, /红色语义分层/);
-  for (const heading of ["颜色角色", "用途", "参考表现"]) {
-    assert.match(html, new RegExp(heading));
-  }
+  assert.doesNotMatch(html, /红色语义分层/);
   for (const role of ["品牌主红", "价格红", "促销亮红", "会员深红", "关怀浅粉", "辅助金色"]) {
-    assert.match(html, new RegExp(role));
+    assert.equal((html.match(new RegExp(`<b>${role}</b>`, "g")) ?? []).length, 1);
   }
   assert.match(html, /选中导航、页签、主要按钮、关键入口/);
-  assert.match(html, /爆料、卡券、立即使用、底部导航选中/);
-  assert.match(html, /超级会员、升级、奖励、优惠标签/);
+  assert.match(html, /参考：(?:<!-- -->)?爆料、卡券、立即使用、底部导航选中/);
+  assert.match(html, /参考：(?:<!-- -->)?超级会员、升级、奖励、优惠标签/);
   assert.match(html, /红橙渐变仅限营销素材，不纳入红色组件 Token/);
 });

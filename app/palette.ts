@@ -21,6 +21,7 @@ export type PaletteControl = {
   key: keyof Palette;
   label: string;
   description: string;
+  reference?: string;
 };
 
 export const defaultPalettes: Record<ThemeId, Palette> = {
@@ -56,12 +57,12 @@ const themePresets: Record<ThemeId, PalettePreset[]> = {
 
 const themeColorControls: Record<ThemeId, PaletteControl[]> = {
   red: [
-    { key: "brand", label: "品牌主色", description: "品牌、主按钮、选中态" },
-    { key: "price", label: "价格红", description: "商品价格、到手价" },
-    { key: "promo", label: "促销红", description: "优惠券、秒杀、满减" },
-    { key: "member", label: "会员深红", description: "VIP 权益、会员专享" },
-    { key: "care", label: "关怀粉红", description: "成长提醒、育儿内容" },
-    { key: "accent", label: "辅助金色", description: "会员权益、品质背书、强调信息" },
+    { key: "brand", label: "品牌主红", description: "选中导航、页签、主要按钮、关键入口", reference: "爆料、卡券、立即使用、底部导航选中" },
+    { key: "price", label: "价格红", description: "价格、收益、补贴、优惠金额", reference: "¥32.93、59.9元、佣金、达标补贴" },
+    { key: "promo", label: "促销亮红", description: "促销标签、领取按钮、分享按钮、活动提醒", reference: "历史最低、领券购买、推广赚" },
+    { key: "member", label: "会员深红", description: "强调标题、描边按钮、会员与重要业务文字", reference: "达标补贴、立即报名、提现按钮" },
+    { key: "care", label: "关怀浅粉", description: "页面头部氛围、信息背景、图标底色", reference: "顶部渐变、收益区域背景、功能图标背景" },
+    { key: "accent", label: "辅助金色", description: "会员、奖励、品质、权益", reference: "超级会员、升级、奖励、优惠标签" },
   ],
   blue: [
     { key: "brand", label: "主蓝", description: "主按钮、标签选中、导航激活" },

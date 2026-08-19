@@ -61,9 +61,18 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .controls { display: grid; gap: 10px; margin-top: 22px; }
 .color-control { display: grid; grid-template-columns: minmax(0, 1fr) 138px; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid #f0f1f3; }
 .color-control:first-child { border-top: 0; }
-.control-copy b, .control-copy small { display: block; }
+.control-copy b, .control-copy small, .control-copy em { display: block; }
 .control-copy b { font-size: 14px; line-height: 22px; }
 .control-copy small { color: var(--text-secondary); font-size: 12px; line-height: 20px; }
+.control-copy em { color: #8a9099; font-size: 11px; line-height: 18px; font-style: normal; }
+.semantic-control { grid-template-columns: minmax(0,1fr) 138px; align-items: center; column-gap: 12px; row-gap: 3px; padding: 12px 0; }
+.semantic-control .control-copy { display: contents; }
+.semantic-control .control-copy b { grid-column: 1; grid-row: 1; align-self: center; }
+.semantic-control .color-input-row { grid-column: 2; grid-row: 1; }
+.semantic-control .control-copy small { grid-column: 1 / -1; grid-row: 2; margin-top: 3px; }
+.semantic-control .control-copy em { grid-column: 1 / -1; grid-row: 3; }
+.semantic-editor-note { margin: 12px 0 0; padding: 9px 11px; border-radius: var(--radius-small); color: var(--text-secondary); background: var(--brand-pale); font-size: 12px; line-height: 20px; }
+.semantic-editor-note b { display: block; color: var(--brand-deep); }
 .color-input-row { display: grid; grid-template-columns: 44px minmax(0,1fr); gap: 7px; }
 .color-picker { width: 44px; height: 44px; padding: 4px; border: 1px solid var(--border); border-radius: var(--radius-medium); background: #fff; }
 .hex-input { min-width: 0; height: 44px; padding: 0 9px; border: 1px solid var(--border); border-radius: var(--radius-medium); color: var(--text-primary); background: #fafafa; font-family: ui-monospace, SFMono-Regular, Consolas, monospace; font-size: 13px; font-weight: 700; letter-spacing: .02em; }
@@ -87,7 +96,7 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .board-header { min-height: 38px; margin-bottom: 18px; }
 .live-badge { display: inline-flex; align-items: center; gap: 7px; padding: 6px 10px; border-radius: 999px; color: var(--text-secondary); background: #f1f3f5; font-size: 12px; line-height: 20px; font-weight: 800; letter-spacing: .08em; }
 .live-badge i { width: 7px; height: 7px; border-radius: 50%; background: #2ba471; box-shadow: 0 0 0 4px rgba(43,164,113,.12); }
-.tone-card, .semantic-card, .component-card { border: 1px solid var(--border); border-radius: var(--radius-medium); background: var(--surface); }
+.tone-card, .component-card { border: 1px solid var(--border); border-radius: var(--radius-medium); background: var(--surface); }
 .tone-card { padding: 20px; }
 .card-title-row { align-items: flex-end; margin-bottom: 15px; }
 .card-title-row h3 { margin: 0; font-size: 18px; line-height: 26px; }
@@ -98,27 +107,6 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .tone-item > span { display: block; margin-bottom: 2px; color: #35383f; font-size: 12px; line-height: 20px; font-weight: 800; }
 .tone-item code { display: block; overflow: hidden; color: var(--text-secondary); font-size: 10px; line-height: 16px; text-overflow: ellipsis; }
 .tone-item > b { position: absolute; top: 7px; left: 7px; padding: 2px 6px; border-radius: var(--radius-small); color: #fff; background: rgba(0,0,0,.25); font-size: 10px; line-height: 16px; }
-
-.semantic-card { margin-top: 12px; padding: 20px; }
-.semantic-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; margin-bottom: 14px; }
-.semantic-heading h3 { margin: 0; font-size: 18px; line-height: 26px; }
-.semantic-heading p { max-width: 540px; margin: 0; color: var(--text-secondary); font-size: 12px; line-height: 20px; text-align: right; }
-.semantic-table-wrap { overflow: hidden; border: 1px solid #e9ebef; border-radius: var(--radius-medium); }
-.semantic-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.semantic-table th, .semantic-table td { padding: 12px 14px; border-bottom: 1px solid #eceef1; text-align: left; vertical-align: middle; }
-.semantic-table th { color: #737984; background: #f7f8fa; font-size: 12px; line-height: 20px; font-weight: 600; }
-.semantic-table th:first-child { width: 25%; }
-.semantic-table th:nth-child(2) { width: 37%; }
-.semantic-table th:nth-child(3) { width: 38%; }
-.semantic-table tbody tr:last-child td { border-bottom: 0; }
-.semantic-table td { color: var(--text-secondary); font-size: 13px; line-height: 20px; }
-.semantic-role { display: flex; align-items: center; gap: 10px; }
-.semantic-role > i { flex: 0 0 auto; width: 34px; height: 34px; border: 2px solid #fff; border-radius: var(--radius-medium); box-shadow: 0 0 0 1px #e4e6ea, 0 3px 9px rgba(31,35,41,.08); }
-.semantic-role strong, .semantic-role code { display: block; }
-.semantic-role strong { color: var(--text-primary); font-size: 14px; line-height: 22px; }
-.semantic-role code { color: #737984; font-size: 11px; line-height: 18px; }
-.semantic-guardrail { margin: 12px 0 0; padding: 9px 11px; border-radius: var(--radius-small); color: var(--text-secondary); background: var(--brand-pale); font-size: 12px; line-height: 20px; }
-.semantic-guardrail b { margin-right: 8px; color: var(--brand-deep); }
 
 .component-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; margin-top: 12px; }
 .component-card { min-height: 260px; padding: 18px; overflow: hidden; }
@@ -257,18 +245,6 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
   .component-grid { grid-template-columns: 1fr; }
   .tone-grid { grid-template-columns: repeat(2,1fr); }
   .tone-swatch { height: 56px; }
-  .semantic-card { padding: 16px; }
-  .semantic-heading { display: block; }
-  .semantic-heading p { margin-top: 5px; text-align: left; }
-  .semantic-table-wrap { border: 0; overflow: visible; }
-  .semantic-table, .semantic-table tbody { display: block; }
-  .semantic-table thead { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-  .semantic-table tbody { display: grid; gap: 9px; }
-  .semantic-table tr { display: grid; gap: 5px; padding: 11px; border: 1px solid #e9ebef; border-radius: var(--radius-medium); }
-  .semantic-table td { display: grid; grid-template-columns: 68px minmax(0,1fr); gap: 8px; padding: 0; border: 0; }
-  .semantic-table td::before { content: attr(data-label); color: #858b96; font-size: 11px; font-weight: 600; }
-  .semantic-table td:first-child { display: block; margin-bottom: 2px; }
-  .semantic-table td:first-child::before { display: none; }
   .product-card { grid-template-columns: 38% 1fr; }
 }
 
