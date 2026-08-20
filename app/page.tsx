@@ -217,7 +217,7 @@ export default function Home() {
           <div className="component-grid">
             <article className="component-card typography-card">
               <span className="section-label">TYPOGRAPHY</span><h3>字体规范</h3>
-              <p className="typography-note">{theme === "red" ? "红色主题字体采用黑灰层级；浅灰仅用于描边、分割线和底色。" : "蓝色主题字体采用 #323232 / #646464 / #969696 / #C8C8C8 四级中性灰。"}</p>
+              <p className="typography-note">{theme === "red" ? "红色主题字体采用黑灰层级；浅灰仅用于描边、分割线和底色。" : "蓝色主题字体采用 #222222 / #646464 / #969696 / #C8C8C8 四级中性灰。"}</p>
               <div className="typography-table-wrap">
                 <table className="typography-table">
                   <thead><tr><th scope="col">示例</th><th scope="col">字号 / 行高</th><th scope="col">字重</th><th scope="col">字体颜色</th><th scope="col">用途</th></tr></thead>

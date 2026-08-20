@@ -168,8 +168,8 @@ test("maps the approved four-level neutral text palette to blue typography roles
   assert.deepEqual(
     getTypographySpecs?.("blue").map(({ sample, color, usage }) => [sample, color, usage]),
     [
-      ["页面标题", "#323232", "一级页面标题、详情页标题"],
-      ["模块标题", "#323232", "卡片标题、弹窗标题、运营区标题"],
+      ["页面标题", "#222222", "一级页面标题、详情页标题"],
+      ["模块标题", "#222222", "卡片标题、弹窗标题、运营区标题"],
       ["区块标题", "#646464", "表单分组、列表区块标题"],
       ["正文文字", "#646464", "商品信息、表单内容、列表正文"],
       ["辅助说明", "#969696", "注释、帮助、时间与状态说明"],

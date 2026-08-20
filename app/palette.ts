@@ -21,8 +21,8 @@ export type TypographySpec = {
 };
 
 const typographySpecs: Array<Omit<TypographySpec, "color"> & { colors: Partial<Record<ThemeId, string>> }> = [
-  { sample: "页面标题", className: "type-page", size: "24px / 32px", weight: "Medium / 600", colors: { red: "#222222", blue: "#323232" }, usage: "一级页面标题、详情页标题" },
-  { sample: "模块标题", className: "type-section", size: "20px / 28px", weight: "Medium / 600", colors: { red: "#222222", blue: "#323232" }, usage: "卡片标题、弹窗标题、运营区标题" },
+  { sample: "页面标题", className: "type-page", size: "24px / 32px", weight: "Medium / 600", colors: { red: "#222222", blue: "#222222" }, usage: "一级页面标题、详情页标题" },
+  { sample: "模块标题", className: "type-section", size: "20px / 28px", weight: "Medium / 600", colors: { red: "#222222", blue: "#222222" }, usage: "卡片标题、弹窗标题、运营区标题" },
   { sample: "区块标题", className: "type-subsection", size: "16px / 24px", weight: "Medium / 600", colors: { red: "#222222", blue: "#646464" }, usage: "表单分组、列表区块标题" },
   { sample: "正文文字", className: "type-body", size: "14px / 22px", weight: "Regular / 400", colors: { red: "#666666", blue: "#646464" }, usage: "商品信息、表单内容、列表正文" },
   { sample: "辅助说明", className: "type-caption", size: "12px / 20px", weight: "Regular / 400", colors: { red: "#999999", blue: "#969696" }, usage: "注释、帮助、时间与状态说明" },
