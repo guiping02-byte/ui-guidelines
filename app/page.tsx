@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   defaultPalettes,
+  getTypographySpecs,
   getThemeColorControls,
   getThemePresets,
   mix,
@@ -17,14 +18,6 @@ import {
 const THEME_KEY = "ui-board-theme";
 const WORK_TYPES = ["全职", "兼职", "校招", "实习"];
 const JOB_ROLES = ["文员", "行政", "运营", "销售", "客服", "设计"];
-const TYPOGRAPHY_SPECS = [
-  { sample: "页面标题", className: "type-page", size: "24px / 32px", weight: "Medium / 600", redColor: "#222222", usage: "一级页面标题、详情页标题" },
-  { sample: "模块标题", className: "type-section", size: "20px / 28px", weight: "Medium / 600", redColor: "#222222", usage: "卡片标题、弹窗标题、运营区标题" },
-  { sample: "区块标题", className: "type-subsection", size: "16px / 24px", weight: "Medium / 600", redColor: "#222222", usage: "表单分组、列表区块标题" },
-  { sample: "正文文字", className: "type-body", size: "14px / 22px", weight: "Regular / 400", redColor: "#666666", usage: "商品信息、表单内容、列表正文" },
-  { sample: "辅助说明", className: "type-caption", size: "12px / 20px", weight: "Regular / 400", redColor: "#999999", usage: "注释、帮助、时间与状态说明" },
-  { sample: "按钮文字", className: "type-action", size: "14px / 22px", weight: "Medium / 600", redColor: "#222222", usage: "主次按钮、筛选项和操作入口" },
-];
 const RADIUS_SPECS = [
   { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
   { token: "--radius-medium", value: "8px", label: "中圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
@@ -70,6 +63,7 @@ export default function Home() {
   const palette = palettes[theme];
   const presets = getThemePresets(theme);
   const colorControls = getThemeColorControls(theme);
+  const typographySpecs = getTypographySpecs(theme);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -221,23 +215,20 @@ export default function Home() {
           <div className="component-grid">
             <article className="component-card typography-card">
               <span className="section-label">TYPOGRAPHY</span><h3>字体规范</h3>
-              <p className="typography-note">{theme === "red" ? "红色主题字体采用黑灰层级；浅灰仅用于描边、分割线和底色。" : "蓝色主题字体颜色暂未定义。"}</p>
+              <p className="typography-note">{theme === "red" ? "红色主题字体采用黑灰层级；浅灰仅用于描边、分割线和底色。" : "蓝色主题字体采用 #323232 / #646464 / #969696 / #C8C8C8 四级中性灰。"}</p>
               <div className="typography-table-wrap">
                 <table className="typography-table">
                   <thead><tr><th scope="col">示例</th><th scope="col">字号 / 行高</th><th scope="col">字重</th><th scope="col">字体颜色</th><th scope="col">用途</th></tr></thead>
                   <tbody>
-                    {TYPOGRAPHY_SPECS.map((item) => {
-                      const typographyColor = theme === "red" ? item.redColor : null;
-                      return (
+                    {typographySpecs.map((item) => (
                         <tr key={item.sample}>
-                          <td><span className={`type-sample ${item.className}`} style={typographyColor ? { color: typographyColor } : undefined}>{item.sample}</span></td>
+                          <td><span className={`type-sample ${item.className}`} style={{ color: item.color }}>{item.sample}</span></td>
                           <td><code>{item.size}</code></td>
                           <td><span className="type-weight">{item.weight}</span></td>
-                          <td>{typographyColor ? <span className="type-color-value"><i style={{ background: typographyColor }} aria-hidden="true" /><code>{typographyColor}</code></span> : <span className="type-color-pending"><i aria-hidden="true" />待定义</span>}</td>
+                          <td><span className="type-color-value"><i style={{ background: item.color }} aria-hidden="true" /><code>{item.color}</code></span></td>
                           <td>{item.usage}</td>
                         </tr>
-                      );
-                    })}
+                    ))}
                   </tbody>
                 </table>
               </div>
