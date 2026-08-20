@@ -37,6 +37,20 @@ export function getTypographySpecs(theme: ThemeId): TypographySpec[] {
   });
 }
 
+export type PageBackgroundSpec = {
+  color: string;
+  usage: string;
+};
+
+const pageBackgroundSpecs: Record<ThemeId, PageBackgroundSpec> = {
+  red: { color: "#FAFAFA", usage: "页面整体背景、内容区域底色" },
+  blue: { color: "#FAFAFA", usage: "页面整体背景、内容区域底色" },
+};
+
+export function getPageBackgroundSpec(theme: ThemeId) {
+  return pageBackgroundSpecs[theme];
+}
+
 export type PalettePreset = {
   name: string;
   note: string;

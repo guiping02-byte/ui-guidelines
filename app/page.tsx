@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import {
   defaultPalettes,
+  getPageBackgroundSpec,
   getTypographySpecs,
   getThemeColorControls,
   getThemePresets,
@@ -64,6 +65,7 @@ export default function Home() {
   const presets = getThemePresets(theme);
   const colorControls = getThemeColorControls(theme);
   const typographySpecs = getTypographySpecs(theme);
+  const pageBackgroundSpec = getPageBackgroundSpec(theme);
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -232,12 +234,10 @@ export default function Home() {
                   </tbody>
                 </table>
               </div>
-              {theme === "red" && (
-                <section className="background-color-spec" aria-label="页面背景色规范">
-                  <span className="background-color-copy"><b>页面背景色</b><small>页面整体背景、内容区域底色</small></span>
-                  <span className="background-color-value"><i aria-hidden="true" /><code>#FAFAFA</code></span>
-                </section>
-              )}
+              <section className="background-color-spec" aria-label="页面背景色规范">
+                <span className="background-color-copy"><b>页面背景色</b><small>{pageBackgroundSpec.usage}</small></span>
+                <span className="background-color-value"><i style={{ background: pageBackgroundSpec.color }} aria-hidden="true" /><code>{pageBackgroundSpec.color}</code></span>
+              </section>
             </article>
 
             <article className="component-card radius-card">

@@ -178,3 +178,12 @@ test("maps the approved four-level neutral text palette to blue typography roles
     ],
   );
 });
+
+test("provides the approved page background specification for the blue theme", () => {
+  const getPageBackgroundSpec = paletteModule.getPageBackgroundSpec;
+  assert.equal(typeof getPageBackgroundSpec, "function");
+  assert.deepEqual(getPageBackgroundSpec?.("blue"), {
+    color: "#FAFAFA",
+    usage: "页面整体背景、内容区域底色",
+  });
+});
