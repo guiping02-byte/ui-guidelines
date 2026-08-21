@@ -75,7 +75,7 @@ export const defaultPalettes: Record<ThemeId, Palette> = {
   },
   blue: {
     brand: "#1677FF",
-    price: "#D9363E",
+    price: "#F5574C",
     promo: "#FF6A2A",
     member: "#183B6B",
     care: "#22B8E6",
@@ -194,5 +194,5 @@ export function serializeTokens(palette: Palette) {
 }
 
 export function storageKeyForTheme(theme: ThemeId) {
-  return theme === "blue" ? "maternal-ui-palette:blue:fintech-v1" : "maternal-ui-palette:red";
+  return theme === "blue" ? "maternal-ui-palette:blue:fintech-v2" : "maternal-ui-palette:red";
 }

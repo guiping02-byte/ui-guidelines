@@ -77,7 +77,7 @@ test("keeps red and blue palettes in separate storage slots", () => {
   });
   assert.deepEqual(defaultPalettes.blue, {
     brand: "#1677FF",
-    price: "#D9363E",
+    price: "#F5574C",
     promo: "#FF6A2A",
     member: "#183B6B",
     care: "#22B8E6",
@@ -85,7 +85,7 @@ test("keeps red and blue palettes in separate storage slots", () => {
     gradientEnd: "#1677FF",
   });
   assert.equal(storageKeyForTheme("red"), "maternal-ui-palette:red");
-  assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue:fintech-v1");
+  assert.equal(storageKeyForTheme("blue"), "maternal-ui-palette:blue:fintech-v2");
 });
 
 test("offers one reference-matched fintech blue preset", () => {
@@ -141,7 +141,7 @@ test("serializes the blue gradient as reusable CSS tokens", () => {
     serializeTokens(defaultPalettes.blue),
     [
       "--color-brand-primary: #1677FF;",
-      "--color-price: #D9363E;",
+      "--color-price: #F5574C;",
       "--color-promo: #FF6A2A;",
       "--color-member: #183B6B;",
       "--color-care: #22B8E6;",

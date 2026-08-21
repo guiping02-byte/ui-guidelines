@@ -17,3 +17,16 @@ test("uses the editable blue gradient only for the active bottom navigation icon
   assert.match(css, /\.nav-demo \.active i\{[^}]*background:var\(--brand\)/);
   assert.match(css, /\.app-shell\[data-theme=blue\] \.nav-demo \.active i\{[^}]*background:linear-gradient\(135deg,\s*var\(--gradient-start\),\s*var\(--gradient-end\)\)/);
 });
+
+test("uses the approved solid colors for normal and disabled blue large buttons", async () => {
+  const css = await readBuiltCss();
+  const primary = css.match(/\.app-shell\[data-theme=blue\] \.demo-primary\{[^}]*\}/)?.[0];
+  const disabled = css.match(/\.app-shell\[data-theme=blue\] \.demo-disabled\{[^}]*\}/)?.[0];
+
+  assert.ok(primary, "missing blue primary button rule");
+  assert.match(primary, /background:#2c89ff/);
+  assert.doesNotMatch(primary, /linear-gradient/);
+  assert.ok(disabled, "missing blue disabled button rule");
+  assert.match(disabled, /background:#7fb8ff/);
+  assert.match(disabled, /grid-column:span 2/);
+});
