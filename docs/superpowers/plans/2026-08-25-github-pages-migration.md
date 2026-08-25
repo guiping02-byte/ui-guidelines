@@ -24,8 +24,8 @@
 
 ## File Structure
 
-- `pages/index.html`: static document and React mount point for GitHub Pages.
-- `pages/main.tsx`: browser entry that imports the shared stylesheet and mounts the existing board.
+- `github-pages/index.html`: static document and React mount point for GitHub Pages.
+- `github-pages/main.tsx`: browser entry that imports the shared stylesheet and mounts the existing board. The directory deliberately avoids the reserved Next/vinext `pages` route name.
 - `vite.pages.config.ts`: isolated static-build configuration with the repository base path.
 - `tests/github-pages.test.mjs`: deployment-contract tests for the static entry, base path, scripts, workflow, and README.
 - `.github/workflows/pages.yml`: official GitHub Pages build-and-deploy workflow.
@@ -36,8 +36,8 @@
 
 **Files:**
 - Create: `tests/github-pages.test.mjs`
-- Create: `pages/index.html`
-- Create: `pages/main.tsx`
+- Create: `github-pages/index.html`
+- Create: `github-pages/main.tsx`
 - Create: `vite.pages.config.ts`
 - Modify: `package.json`
 
@@ -62,8 +62,8 @@ test("defines a GitHub Pages static build for the repository base path", async (
   const [packageJson, config, html, entry] = await Promise.all([
     text("package.json"),
     text("vite.pages.config.ts"),
-    text("pages/index.html"),
-    text("pages/main.tsx"),
+    text("github-pages/index.html"),
+    text("github-pages/main.tsx"),
   ]);
 
   assert.equal(JSON.parse(packageJson).scripts["build:pages"], "vite build --config vite.pages.config.ts");
@@ -81,11 +81,11 @@ test("defines a GitHub Pages static build for the repository base path", async (
 
 Run: `node --test tests/github-pages.test.mjs`
 
-Expected: FAIL because `vite.pages.config.ts`, `pages/index.html`, and `pages/main.tsx` do not exist.
+Expected: FAIL because `vite.pages.config.ts`, `github-pages/index.html`, and `github-pages/main.tsx` do not exist.
 
 - [ ] **Step 3: Add the minimal static entry and build configuration**
 
-Create `pages/index.html`:
+Create `github-pages/index.html`:
 
 ```html
 <!doctype html>
@@ -103,7 +103,7 @@ Create `pages/index.html`:
 </html>
 ```
 
-Create `pages/main.tsx`:
+Create `github-pages/main.tsx`:
 
 ```tsx
 import { StrictMode } from "react";
@@ -132,7 +132,7 @@ import { defineConfig } from "vite";
 
 export default defineConfig({
   base: "/ui-guidelines/",
-  root: "pages",
+  root: "github-pages",
   plugins: [react()],
   build: {
     outDir: "../dist-pages",
@@ -171,7 +171,7 @@ Expected: exits successfully with no output.
 - [ ] **Step 6: Commit the static build**
 
 ```powershell
-git add package.json pages vite.pages.config.ts tests/github-pages.test.mjs
+git add package.json github-pages vite.pages.config.ts tests/github-pages.test.mjs
 git commit -m "feat: add GitHub Pages static build"
 ```
 

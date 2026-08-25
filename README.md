@@ -4,7 +4,7 @@
 
 ## 在线访问
 
-[打开 UI 设计规范看板](https://blue-ui-board-lixujie.guiping02.chatgpt.site/)
+[打开 UI 设计规范看板](https://guiping02-byte.github.io/ui-guidelines/)
 
 ## 看板内容
 
@@ -34,10 +34,15 @@ pnpm lint
 
 `pnpm test` 会先完成 vinext 生产构建，再执行颜色 Token、页面结构与样式契约测试。
 
+## 发布更新
+
+提交并推送到 GitHub 的 `main` 分支后，GitHub Pages 会自动构建和发布，通常需要几分钟才能在公开链接上看到更新。
+
+看板中直接修改的色号保存在当前浏览器，不会自动提交或同步回 GitHub；需要永久更新公开看板时，应修改源码并推送到 `main`。
+
 ## 技术栈
 
 - React 19
 - vinext / Vite
 - TypeScript
-- OpenAI Sites / Cloudflare Worker runtime
-
+- GitHub Pages / GitHub Actions
