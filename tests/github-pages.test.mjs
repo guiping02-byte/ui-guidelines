@@ -29,11 +29,13 @@ test("defines a GitHub Pages static build for the repository base path", async (
 });
 
 test("deploys main to GitHub Pages and documents the new public URL", async () => {
-  const [workflow, readme, gitignore, eslintConfig] = await Promise.all([
+  const [workflow, readme, gitignore, eslintConfig, packageJson] =
+    await Promise.all([
     text(".github/workflows/pages.yml"),
     text("README.md"),
     text(".gitignore"),
     text("eslint.config.mjs"),
+    text("package.json"),
   ]);
 
   assert.match(workflow, /branches:\s*\[main\]/);
@@ -50,4 +52,8 @@ test("deploys main to GitHub Pages and documents the new public URL", async () =
   );
   assert.match(gitignore, /^dist-pages\/$/m);
   assert.match(eslintConfig, /["']dist-pages\/\*\*["']/);
+  assert.match(
+    JSON.parse(packageJson).scripts.test,
+    /node --experimental-strip-types --test/,
+  );
 });
