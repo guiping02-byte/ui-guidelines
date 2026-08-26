@@ -30,3 +30,13 @@ test("uses the approved solid colors for normal and disabled blue large buttons"
   assert.match(disabled, /background:#7fb8ff/);
   assert.match(disabled, /grid-column:span 2/);
 });
+
+test("uses the approved pink for the disabled red large button", async () => {
+  const css = await readBuiltCss();
+  const disabled = css.match(/\.app-shell\[data-theme=red\] \.demo-disabled\{[^}]*\}/)?.[0];
+
+  assert.ok(disabled, "missing red disabled button rule");
+  assert.match(disabled, /background:#fda0b0/);
+  assert.match(disabled, /color:#fff/);
+  assert.match(disabled, /grid-column:span 2/);
+});
