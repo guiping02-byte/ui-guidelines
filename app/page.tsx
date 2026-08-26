@@ -66,6 +66,7 @@ export default function Home() {
   const colorControls = getThemeColorControls(theme);
   const typographySpecs = getTypographySpecs(theme);
   const pageBackgroundSpec = getPageBackgroundSpec(theme);
+  const warmPalette = theme === "blue" ? palette : defaultPalettes.blue;
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -116,6 +117,9 @@ export default function Home() {
     "--brand-deep": mix(palette.brand, "#000000", 0.22),
     "--price": palette.price,
     "--promo": palette.promo,
+    "--reward-soft": warmPalette.rewardSoft,
+    "--benefit-gold": warmPalette.benefitGold,
+    "--benefit-soft": warmPalette.benefitSoft,
     "--member": palette.member,
     "--care": palette.care,
     "--care-pale": mix(palette.care, "#FFFFFF", 0.9),
@@ -251,6 +255,18 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+            </article>
+
+            <article className="component-card blue-warm-card">
+              <span className="section-label">WARM AUXILIARY COLORS</span><h3>暖色辅助规范</h3>
+              <p className="warm-color-note">蓝色界面中的暖色用于奖励、权益与收益强调，形成冷暖层次。</p>
+              <div className="warm-color-grid">
+                <div className="warm-color-item"><i style={{ background: warmPalette.promo }} /><span><b>奖励橙</b><code>{warmPalette.promo}</code><small>+9积分、去领取、85岁、预计累计收益</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.rewardSoft }} /><span><b>浅橙底</b><code>{warmPalette.rewardSoft}</code><small>奖励条、轻按钮、提示标签背景</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.benefitGold }} /><span><b>权益金</b><code>{warmPalette.benefitGold}</code><small>金币图标、金选理由、会员权益</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.benefitSoft }} /><span><b>浅金底</b><code>{warmPalette.benefitSoft}</code><small>权益卡、保险说明、活动氛围背景</small></span></div>
+              </div>
+              <p className="warm-color-limit"><b>使用限制</b>暖色只做局部强调，不能替代主蓝按钮与导航。</p>
             </article>
 
             <article className="component-card">

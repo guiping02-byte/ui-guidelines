@@ -136,6 +136,20 @@ test("renders the approved 4px and 8px radius guidelines", async () => {
   assert.match(html, /按钮、输入框、选择项、卡片内部容器/);
 });
 
+test("documents blue warm auxiliary colors with roles and reference examples", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  assert.match(html, /暖色辅助规范/);
+  for (const value of ["#FF6A2A", "#FFF1E8", "#FFD666", "#FFF7E6"]) {
+    assert.match(html, new RegExp(value, "i"));
+  }
+  assert.match(html, /\+9积分、去领取、85岁、预计累计收益/);
+  assert.match(html, /奖励条、轻按钮、提示标签背景/);
+  assert.match(html, /金币图标、金选理由、会员权益/);
+  assert.match(html, /暖色只做局部强调，不能替代主蓝按钮与导航/);
+});
+
 test("merges red semantic details into the left editor without duplicate content", async () => {
   const response = await render();
   const html = await response.text();

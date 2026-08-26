@@ -5,6 +5,9 @@ export type Palette = {
   member: string;
   care: string;
   accent?: string;
+  rewardSoft?: string;
+  benefitGold?: string;
+  benefitSoft?: string;
   gradientStart?: string;
   gradientEnd?: string;
 };
@@ -77,6 +80,9 @@ export const defaultPalettes: Record<ThemeId, Palette> = {
     brand: "#1677FF",
     price: "#F5574C",
     promo: "#FF6A2A",
+    rewardSoft: "#FFF1E8",
+    benefitGold: "#FFD666",
+    benefitSoft: "#FFF7E6",
     member: "#183B6B",
     care: "#22B8E6",
     gradientStart: "#22B8E6",
@@ -107,7 +113,10 @@ const themeColorControls: Record<ThemeId, PaletteControl[]> = {
   blue: [
     { key: "brand", label: "主蓝", description: "主按钮、标签选中、导航激活" },
     { key: "price", label: "收益红", description: "收益数字、上涨、重要提醒" },
-    { key: "promo", label: "奖励橙", description: "积分奖励、业务入口、提示" },
+    { key: "promo", label: "奖励橙", description: "奖励金额、积分、收益强调", reference: "+9积分、去领取、85岁、预计累计收益" },
+    { key: "rewardSoft", label: "浅橙底", description: "奖励条、轻按钮、提示标签背景", reference: "支付奖励、签到积分、领取入口" },
+    { key: "benefitGold", label: "权益金", description: "金币图标、金选理由、会员权益", reference: "金币、推荐理由、品质权益" },
+    { key: "benefitSoft", label: "浅金底", description: "权益卡、保险说明、活动氛围", reference: "产品竞争力、保障说明、会员权益卡" },
     { key: "member", label: "金融深蓝", description: "标题、图标描边、专业信息" },
     { key: "care", label: "科技青", description: "渐变高光、服务图标、背景氛围" },
     { key: "gradientStart", label: "渐变起始色", description: "蓝色按钮左上方高光" },
@@ -146,6 +155,12 @@ export function validateStoredPalette(value: unknown): Palette | null {
     if (!accent) return null;
     palette = { ...palette, accent };
   }
+  for (const key of ["rewardSoft", "benefitGold", "benefitSoft"] as const) {
+    if (record[key] === undefined) continue;
+    const color = normalizeHex(record[key]);
+    if (!color) return null;
+    palette = { ...palette, [key]: color };
+  }
 
   const hasGradientStart = record.gradientStart !== undefined;
   const hasGradientEnd = record.gradientEnd !== undefined;
@@ -175,9 +190,14 @@ export function serializeTokens(palette: Palette) {
     `--color-brand-primary: ${palette.brand};`,
     `--color-price: ${palette.price};`,
     `--color-promo: ${palette.promo};`,
+  ];
+  if (palette.rewardSoft) tokens.push(`--color-reward-soft: ${palette.rewardSoft};`);
+  if (palette.benefitGold) tokens.push(`--color-benefit-gold: ${palette.benefitGold};`);
+  if (palette.benefitSoft) tokens.push(`--color-benefit-soft: ${palette.benefitSoft};`);
+  tokens.push(
     `--color-member: ${palette.member};`,
     `--color-care: ${palette.care};`,
-  ];
+  );
   if (palette.accent) tokens.push(`--color-accent: ${palette.accent};`);
   if (palette.gradientStart && palette.gradientEnd) {
     tokens.push(
