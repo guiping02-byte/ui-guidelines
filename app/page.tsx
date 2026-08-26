@@ -244,6 +244,18 @@ export default function Home() {
               </section>
             </article>
 
+            <article className="component-card blue-warm-card">
+              <span className="section-label">WARM AUXILIARY COLORS</span><h3>暖色辅助规范</h3>
+              <p className="warm-color-note">蓝色界面中的暖色用于奖励、权益与收益强调，形成冷暖层次。</p>
+              <div className="warm-color-grid">
+                <div className="warm-color-item"><i style={{ background: warmPalette.promo }} /><span><b>奖励橙</b><code>{warmPalette.promo}</code><small>+9积分、去领取、85岁、预计累计收益</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.rewardSoft }} /><span><b>浅橙底</b><code>{warmPalette.rewardSoft}</code><small>奖励条、轻按钮、提示标签背景</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.benefitGold }} /><span><b>权益金</b><code>{warmPalette.benefitGold}</code><small>金币图标、金选理由、会员权益</small></span></div>
+                <div className="warm-color-item"><i style={{ background: warmPalette.benefitSoft }} /><span><b>浅金底</b><code>{warmPalette.benefitSoft}</code><small>权益卡、保险说明、活动氛围背景</small></span></div>
+              </div>
+              <p className="warm-color-limit"><b>使用限制</b>暖色只做局部强调，不能替代主蓝按钮与导航。</p>
+            </article>
+
             <article className="component-card radius-card">
               <span className="section-label">BORDER RADIUS</span><h3>圆角规范</h3>
               <p className="radius-note">矩形组件统一使用两档圆角；圆形图标与胶囊标签保留特殊形状。</p>
@@ -255,18 +267,6 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-            </article>
-
-            <article className="component-card blue-warm-card">
-              <span className="section-label">WARM AUXILIARY COLORS</span><h3>暖色辅助规范</h3>
-              <p className="warm-color-note">蓝色界面中的暖色用于奖励、权益与收益强调，形成冷暖层次。</p>
-              <div className="warm-color-grid">
-                <div className="warm-color-item"><i style={{ background: warmPalette.promo }} /><span><b>奖励橙</b><code>{warmPalette.promo}</code><small>+9积分、去领取、85岁、预计累计收益</small></span></div>
-                <div className="warm-color-item"><i style={{ background: warmPalette.rewardSoft }} /><span><b>浅橙底</b><code>{warmPalette.rewardSoft}</code><small>奖励条、轻按钮、提示标签背景</small></span></div>
-                <div className="warm-color-item"><i style={{ background: warmPalette.benefitGold }} /><span><b>权益金</b><code>{warmPalette.benefitGold}</code><small>金币图标、金选理由、会员权益</small></span></div>
-                <div className="warm-color-item"><i style={{ background: warmPalette.benefitSoft }} /><span><b>浅金底</b><code>{warmPalette.benefitSoft}</code><small>权益卡、保险说明、活动氛围背景</small></span></div>
-              </div>
-              <p className="warm-color-limit"><b>使用限制</b>暖色只做局部强调，不能替代主蓝按钮与导航。</p>
             </article>
 
             <article className="component-card">

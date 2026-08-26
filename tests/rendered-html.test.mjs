@@ -150,6 +150,18 @@ test("documents blue warm auxiliary colors with roles and reference examples", a
   assert.match(html, /暖色只做局部强调，不能替代主蓝按钮与导航/);
 });
 
+test("places the warm auxiliary guidelines before the radius guidelines", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  const warmIndex = html.indexOf("暖色辅助规范");
+  const radiusIndex = html.indexOf("圆角规范");
+
+  assert.notEqual(warmIndex, -1, "missing warm auxiliary guidelines");
+  assert.notEqual(radiusIndex, -1, "missing radius guidelines");
+  assert.ok(warmIndex < radiusIndex, "warm auxiliary guidelines must render before radius guidelines");
+});
+
 test("merges red semantic details into the left editor without duplicate content", async () => {
   const response = await render();
   const html = await response.text();
