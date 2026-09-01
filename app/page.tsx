@@ -20,8 +20,8 @@ const THEME_KEY = "ui-board-theme";
 const WORK_TYPES = ["全职", "兼职", "校招", "实习"];
 const JOB_ROLES = ["文员", "行政", "运营", "销售", "客服", "设计"];
 const STORE_OPTIONS = [
-  { id: "chaoyang", name: "贝因美母婴专卖店（朝阳店）", detail: "银行账户：王秀兰 · 招商银行北京朝阳支行 6214 8301 0098 8892" },
-  { id: "haidian", name: "贝因美母婴专卖店（海淀店）", detail: "银行账户：李晓梅 · 中国银行北京海淀支行 6217 0012 8866 3201" },
+  { id: "chaoyang", name: "母婴专卖店（朝阳店）", detail: "银行账户：王秀兰 · 招商银行北京朝阳支行" },
+  { id: "haidian", name: "母婴专卖店（海淀店）", detail: "银行账户：李晓梅 · 中国银行北京海淀支行" },
 ];
 const RADIUS_SPECS = [
   { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
