@@ -19,6 +19,10 @@ import {
 const THEME_KEY = "ui-board-theme";
 const WORK_TYPES = ["全职", "兼职", "校招", "实习"];
 const JOB_ROLES = ["文员", "行政", "运营", "销售", "客服", "设计"];
+const STORE_OPTIONS = [
+  { id: "chaoyang", name: "贝因美母婴专卖店（朝阳店）", detail: "银行账户：王秀兰 · 招商银行北京朝阳支行 6214 8301 0098 8892" },
+  { id: "haidian", name: "贝因美母婴专卖店（海淀店）", detail: "银行账户：李晓梅 · 中国银行北京海淀支行 6217 0012 8866 3201" },
+];
 const RADIUS_SPECS = [
   { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
   { token: "--radius-medium", value: "8px", label: "中圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
@@ -61,6 +65,7 @@ export default function Home() {
   const [copyState, setCopyState] = useState<"idle" | "copied" | "error">("idle");
   const [workType, setWorkType] = useState("全职");
   const [jobRoles, setJobRoles] = useState(["运营", "销售"]);
+  const [selectedStore, setSelectedStore] = useState("chaoyang");
   const palette = palettes[theme];
   const presets = getThemePresets(theme);
   const colorControls = getThemeColorControls(theme);
@@ -289,6 +294,22 @@ export default function Home() {
                   {JOB_ROLES.map((item) => <button key={item} className="choice-chip" type="button" aria-pressed={jobRoles.includes(item)} onClick={() => toggleJobRole(item)}>{item}</button>)}
                 </div>
               </div>
+            </article>
+
+            <article className="component-card blue-list-selection-card">
+              <section className="blue-list-selection" aria-labelledby="list-choice-title">
+                <span className="section-label">LIST SELECTION</span>
+                <b id="list-choice-title">列表单选状态</b>
+                <p>适用于门店、账户、地址、套餐等整行单选场景</p>
+                <div className="list-choice-stack" role="radiogroup" aria-label="收款门店单选示例">
+                  {STORE_OPTIONS.map((store) => (
+                    <label className="list-choice-card" key={store.id}>
+                      <input type="radio" name="store-example" value={store.id} checked={selectedStore === store.id} onChange={() => setSelectedStore(store.id)} />
+                      <span><strong>{store.name}</strong><small>{store.detail}</small></span>
+                    </label>
+                  ))}
+                </div>
+              </section>
             </article>
 
             <article className="component-card product-card">

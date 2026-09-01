@@ -81,6 +81,20 @@ test("renders selected and unselected choice controls", async () => {
   assert.match(html, /<button[^>]*aria-pressed="false"[^>]*>客服<\/button>/);
 });
 
+test("renders accessible blue list selection cards with one selected option", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  const block = html.match(/<section class="blue-list-selection"[\s\S]*?<\/section>/)?.[0];
+  assert.ok(block, "missing blue list selection guidelines");
+  assert.match(block, /列表单选状态/);
+  assert.match(block, /适用于门店、账户、地址、套餐等整行单选场景/);
+  assert.match(block, /type="radio"/);
+  assert.equal((block.match(/checked=""/g) ?? []).length, 1);
+  assert.match(block, /贝因美母婴专卖店（朝阳店）/);
+  assert.match(block, /贝因美母婴专卖店（海淀店）/);
+});
+
 test("renders the approved red typography color hierarchy", async () => {
   const response = await render();
   const html = await response.text();
