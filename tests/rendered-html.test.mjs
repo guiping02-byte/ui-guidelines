@@ -90,6 +90,7 @@ test("renders accessible blue list selection cards with one selected option", as
   assert.match(block, /列表单选状态/);
   assert.match(block, /适用于门店、账户、地址、套餐等整行单选场景/);
   assert.match(block, /type="radio"/);
+  assert.match(block, /aria-label="选择贝因美母婴专卖店（朝阳店）"/);
   assert.equal((block.match(/checked=""/g) ?? []).length, 1);
   assert.match(block, /贝因美母婴专卖店（朝阳店）/);
   assert.match(block, /贝因美母婴专卖店（海淀店）/);

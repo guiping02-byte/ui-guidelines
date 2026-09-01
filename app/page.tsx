@@ -303,7 +303,7 @@ export default function Home() {
                 <p>适用于门店、账户、地址、套餐等整行单选场景</p>
                 <div className="list-choice-stack" role="radiogroup" aria-label="收款门店单选示例">
                   {STORE_OPTIONS.map((store) => (
-                    <label className="list-choice-card" key={store.id}>
+                    <label className="list-choice-card" key={store.id} aria-label={`选择${store.name}`}>
                       <input type="radio" name="store-example" value={store.id} checked={selectedStore === store.id} onChange={() => setSelectedStore(store.id)} />
                       <span><strong>{store.name}</strong><small>{store.detail}</small></span>
                     </label>
