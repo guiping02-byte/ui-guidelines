@@ -296,8 +296,8 @@ export default function Home() {
               </div>
             </article>
 
-            <article className="component-card blue-list-selection-card">
-              <section className="blue-list-selection" aria-labelledby="list-choice-title">
+            <article className="component-card blue-list-selection-card list-selection-card">
+              <section className="blue-list-selection list-selection" aria-labelledby="list-choice-title">
                 <span className="section-label">LIST SELECTION</span>
                 <b id="list-choice-title">列表单选状态</b>
                 <p>适用于门店、账户、地址、套餐等整行单选场景</p>

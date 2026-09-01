@@ -85,7 +85,7 @@ test("renders accessible blue list selection cards with one selected option", as
   const response = await render();
   const html = await response.text();
 
-  const block = html.match(/<section class="blue-list-selection"[\s\S]*?<\/section>/)?.[0];
+  const block = html.match(/<section class="[^"]*blue-list-selection[^"]*"[\s\S]*?<\/section>/)?.[0];
   assert.ok(block, "missing blue list selection guidelines");
   assert.match(block, /列表单选状态/);
   assert.match(block, /适用于门店、账户、地址、套餐等整行单选场景/);

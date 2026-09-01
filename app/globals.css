@@ -203,15 +203,16 @@ h3 { margin: 6px 0 16px; font-size: 16px; line-height: 24px; }
 .choice-chip:hover { border-color: color-mix(in srgb, var(--brand), white 50%); }
 .choice-chip[aria-pressed="true"] { border-color: var(--brand); color: var(--brand-deep); background: var(--brand-pale); }
 .choice-chip[aria-pressed="true"]::after { content: ""; position: absolute; right: 0; bottom: 0; width: 0; height: 0; border-top: 11px solid transparent; border-right: 11px solid var(--brand); }
-.blue-list-selection-card { grid-column: 1 / -1; min-height: 0; }
-.app-shell[data-theme="red"] .blue-list-selection-card { display: none; }
+.blue-list-selection-card, .list-selection-card { grid-column: 1 / -1; min-height: 0; }
+.app-shell[data-theme="red"] .list-selection { --list-choice-accent: var(--brand); --list-choice-hover: var(--brand-soft); --list-choice-background: var(--brand-pale); }
+.app-shell[data-theme="blue"] .list-selection { --list-choice-accent: #2c89ff; --list-choice-hover: #7fb8ff; --list-choice-background: #f5faff; }
 .blue-list-selection > b { display: block; margin-top: 6px; color: #222; font-size: 16px; line-height: 24px; }
 .blue-list-selection > p { margin: 2px 0 12px; color: #969696; font-size: 12px; line-height: 20px; }
 .list-choice-stack { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
 .list-choice-card { display: grid; grid-template-columns: 20px minmax(0,1fr); align-items: start; gap: 12px; min-height: 86px; padding: 14px; border: 1px solid #e5e6eb; border-radius: var(--radius-medium); background: #fff; cursor: pointer; transition: border-color .18s ease, background-color .18s ease, box-shadow .18s ease; }
-.list-choice-card:hover { border-color: #7fb8ff; }
-.list-choice-card:has(input:checked) { border-color: #2c89ff; background: #f5faff; box-shadow: 0 0 0 1px rgba(44,137,255,.08); }
-.list-choice-card input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: #2c89ff; cursor: pointer; }
+.list-choice-card:hover { border-color: var(--list-choice-hover); }
+.list-choice-card:has(input:checked) { border-color: var(--list-choice-accent); background: var(--list-choice-background); box-shadow: 0 0 0 1px color-mix(in srgb, var(--list-choice-accent), transparent 92%); }
+.list-choice-card input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--list-choice-accent); cursor: pointer; }
 .list-choice-card span, .list-choice-card strong, .list-choice-card small { display: block; min-width: 0; }
 .list-choice-card strong { color: #222; font-size: 14px; line-height: 22px; }
 .list-choice-card small { margin-top: 2px; color: #646464; font-size: 12px; line-height: 20px; overflow-wrap: anywhere; }

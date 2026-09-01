@@ -40,3 +40,13 @@ test("uses the approved pink for the disabled red large button", async () => {
   assert.match(disabled, /color:#fff/);
   assert.match(disabled, /grid-column:span 2/);
 });
+
+test("shows list selection in red with the red theme tokens", async () => {
+  const css = await readBuiltCss();
+  const redSelection = css.match(/\.app-shell\[data-theme=red\] \.list-selection\{[^}]*\}/)?.[0];
+
+  assert.ok(redSelection, "missing red list selection theme rule");
+  assert.match(redSelection, /--list-choice-accent:var\(--brand\)/);
+  assert.match(redSelection, /--list-choice-background:var\(--brand-pale\)/);
+  assert.doesNotMatch(css, /\.app-shell\[data-theme=red\] \.list-selection-card\{[^}]*display:none/);
+});
