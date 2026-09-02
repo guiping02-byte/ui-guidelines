@@ -208,7 +208,7 @@ export function serializeTokens(palette: Palette) {
   }
   tokens.push(
     "--radius-small: 4px;",
-    "--radius-medium: 8px;",
+    "--radius-medium: 10px;",
   );
   return tokens.join("\n");
 }

@@ -20,6 +20,7 @@ test("defines a GitHub Pages static build for the repository base path", async (
   );
   assert.match(config, /base:\s*["']\/ui-guidelines\/["']/);
   assert.match(config, /root:\s*["']github-pages["']/);
+  assert.match(config, /publicDir:\s*["']\.\.\/public["']/);
   assert.match(config, /outDir:\s*["']\.\.\/dist-pages["']/);
   assert.match(html, /<div id="root"><\/div>/);
   assert.match(html, /src="\.\/main\.tsx"/);

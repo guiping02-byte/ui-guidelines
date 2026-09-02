@@ -48,7 +48,7 @@ test("serializes the current semantic palette as CSS tokens", () => {
       "--color-care: #FF7A90;",
       "--color-accent: #DDB65E;",
       "--radius-small: 4px;",
-      "--radius-medium: 8px;",
+      "--radius-medium: 10px;",
     ].join("\n"),
   );
 });
@@ -57,7 +57,7 @@ test("serializes the approved radius scale for every theme", () => {
   for (const palette of Object.values(defaultPalettes)) {
     const tokens = serializeTokens(palette);
     assert.equal((tokens.match(/--radius-small: 4px;/g) ?? []).length, 1);
-    assert.equal((tokens.match(/--radius-medium: 8px;/g) ?? []).length, 1);
+    assert.equal((tokens.match(/--radius-medium: 10px;/g) ?? []).length, 1);
   }
 });
 
@@ -158,7 +158,7 @@ test("serializes the blue gradient as reusable CSS tokens", () => {
       "--color-gradient-end: #1677FF;",
       "--gradient-primary: linear-gradient(135deg, var(--color-gradient-start), var(--color-gradient-end));",
       "--radius-small: 4px;",
-      "--radius-medium: 8px;",
+      "--radius-medium: 10px;",
     ].join("\n"),
   );
   assert.doesNotMatch(serializeTokens(defaultPalettes.red), /gradient/i);

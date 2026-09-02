@@ -23,9 +23,13 @@ const STORE_OPTIONS = [
   { id: "chaoyang", name: "母婴专卖店（朝阳店）", detail: "银行账户：王秀兰 · 招商银行北京朝阳支行" },
   { id: "haidian", name: "母婴专卖店（海淀店）", detail: "银行账户：李晓梅 · 中国银行北京海淀支行" },
 ];
+const PRODUCT_CARD_EXAMPLES = [
+  { id: "growth", name: "成长营养组合", price: "39.99" },
+  { id: "care", name: "亲子呵护组合", price: "39.99" },
+];
 const RADIUS_SPECS = [
   { token: "--radius-small", value: "4px", label: "小圆角", usage: "促销标签、状态标识、小型信息块", className: "radius-small" },
-  { token: "--radius-medium", value: "8px", label: "中圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
+  { token: "--radius-medium", value: "10px", label: "大圆角", usage: "按钮、输入框、选择项、卡片内部容器", className: "radius-medium" },
 ];
 
 function ColorControl({ label, description, reference, value, onChange }: {
@@ -66,6 +70,7 @@ export default function Home() {
   const [workType, setWorkType] = useState("全职");
   const [jobRoles, setJobRoles] = useState(["运营", "销售"]);
   const [selectedStore, setSelectedStore] = useState("chaoyang");
+  const [selectedProduct, setSelectedProduct] = useState<string | null>(null);
   const palette = palettes[theme];
   const presets = getThemePresets(theme);
   const colorControls = getThemeColorControls(theme);
@@ -315,6 +320,29 @@ export default function Home() {
             <article className="component-card product-card">
               <div className="product-visual" aria-hidden="true"><span>6–12 月龄</span><i>成长营养</i></div>
               <div className="product-content"><span className="promo-label">限时优惠</span><h3>宝宝成长营养组合</h3><p>科学配比 · 温和易吸收</p><div className="price-row"><span>¥</span><b>259</b><del>¥329</del></div><div className="member-line"><b>会员专享</b><span>再省 ¥20</span></div></div>
+            </article>
+
+            <article className="component-card red-product-showcase">
+              <span className="section-label">PRODUCT CARD</span><h3>商品卡片</h3>
+              <p className="product-showcase-note">适用于商品列表、活动会场与砍价入口</p>
+              <div className="shop-product-grid">
+                {PRODUCT_CARD_EXAMPLES.map((product) => (
+                  <div className="shop-product-card" key={product.id}>
+                    <div className="shop-product-media">
+                      {/* The same component is built by Vinext and plain Vite for GitHub Pages. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src="/ui-guidelines/generic-product-icon.png" alt="通用商品图标" width="118" height="118" />
+                    </div>
+                    <div className="shop-product-body">
+                      <p>{product.name}</p>
+                      <div className="shop-product-footer">
+                        <span className="shop-product-price"><small>¥</small><strong>{product.price}</strong></span>
+                        <button type="button" aria-pressed={selectedProduct === product.id} onClick={() => setSelectedProduct(product.id)}>去砍价</button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </article>
 
             <article className="component-card care-card">

@@ -139,7 +139,7 @@ test("renders the approved red page background color", async () => {
   assert.match(block, /页面整体背景、内容区域底色/);
 });
 
-test("renders the approved 4px and 8px radius guidelines", async () => {
+test("renders the approved 4px and 10px radius guidelines", async () => {
   const response = await render();
   const html = await response.text();
 
@@ -147,9 +147,22 @@ test("renders the approved 4px and 8px radius guidelines", async () => {
   assert.match(html, /--radius-small/);
   assert.match(html, />4px</);
   assert.match(html, /--radius-medium/);
-  assert.match(html, />8px</);
+  assert.match(html, />10px</);
   assert.match(html, /促销标签、状态标识、小型信息块/);
   assert.match(html, /按钮、输入框、选择项、卡片内部容器/);
+});
+
+test("renders a red-only product card guideline with generic product artwork", async () => {
+  const response = await render();
+  const html = await response.text();
+
+  const block = html.match(/<article class="[^"]*red-product-showcase[^"]*"[\s\S]*?<\/article>/)?.[0];
+  assert.ok(block, "missing red product card guideline");
+  assert.match(block, /商品卡片/);
+  assert.equal((block.match(/class="shop-product-card"/g) ?? []).length, 2);
+  assert.equal((block.match(/src="\/ui-guidelines\/generic-product-icon\.png"/g) ?? []).length, 2);
+  assert.match(block, /去砍价/);
+  assert.doesNotMatch(block, /贝因美|菁爱|奶粉/);
 });
 
 test("documents blue warm auxiliary colors with roles and reference examples", async () => {

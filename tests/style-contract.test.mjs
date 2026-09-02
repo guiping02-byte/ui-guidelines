@@ -50,3 +50,11 @@ test("shows list selection in red with the red theme tokens", async () => {
   assert.match(redSelection, /--list-choice-background:var\(--brand-pale\)/);
   assert.doesNotMatch(css, /\.app-shell\[data-theme=red\] \.list-selection-card\{[^}]*display:none/);
 });
+
+test("keeps the new product card guideline red-only", async () => {
+  const css = await readBuiltCss();
+  const blueRule = css.match(/\.app-shell\[data-theme=blue\] \.red-product-showcase\{[^}]*\}/)?.[0];
+
+  assert.ok(blueRule, "missing blue-theme product-card visibility rule");
+  assert.match(blueRule, /display:none/);
+});
